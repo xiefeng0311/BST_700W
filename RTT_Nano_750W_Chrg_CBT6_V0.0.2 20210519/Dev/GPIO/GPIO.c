@@ -9,6 +9,7 @@
 #include "PWM.h"
 #include "Chrg_Ctrl.h"
 #include "delay.h"
+#include "drv_time.h"
 
 
 
@@ -235,6 +236,7 @@ void ButtonProj(void)
 
 void IO_PCI_Init(void)
 {
+	mcu_gpio_init();
     gpio_init();
 	key_init();												// Button 按键GPIO初始化
     power_on_disenabled();
@@ -341,13 +343,20 @@ void  EXTI2_IRQHandler(void)
 	//    static rt_uint16_t step = 0;
 	uint16_t times;
 	times++;
-    if (times > 20) {
-        if (ACSingal_In() == 1) {
-            period_signl_recd++;                    //ADC监测同步信号使用
-            times = 0;
-            Time3_Start();                          //启动5ms的监测
-        }
+	if (ACSingal_In() == 1) {
+		period_signl_recd++;                    //ADC监测同步信号使用
+		times = 0;
+		Time3_Start();                          //启动5ms的监测		
     }
-    //5ms的保护采用定时器中断实现，并且在终端中启动定时器
+		
+    // if (times > 20) {
+    //     if (ACSingal_In() == 1) {
+    //         period_signl_recd++;                    //ADC监测同步信号使用
+    //         times = 0;
+    //         Time3_Start();                          //启动5ms的监测
+    //     }
+	// 	EXTI_ClearITPendingBit(EXTI_Line2);  //清除LINE3上的中断标志位  
+    // }
+    // //5ms的保护采用定时器中断实现，并且在终端中启动定时器
 	EXTI_ClearITPendingBit(EXTI_Line2);  //清除LINE3上的中断标志位  
 }

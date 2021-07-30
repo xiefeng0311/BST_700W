@@ -97,7 +97,8 @@
  * @brief  Stop LLC V
  * @param PFCVin < 0.83V stop LLC,
  */
-#define PFC_STOPV                   1030
+//#define PFC_STOPV                   1030
+#define PFC_STOPV                   620     			//测试使用
 
 /**
  * @brief  Limit LLC P
@@ -297,6 +298,7 @@ extern uint16_t ADCConvertedBuf[NbrOfBuf][NbrOfChannel];
 
 extern uint16_t adc_finish_flag;
 
+extern uint16_t pwm_step;
 
 
 #endif

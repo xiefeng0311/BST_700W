@@ -1,6 +1,6 @@
 ..\obj\chrg_ctrl.o: ..\Charger_Ctrl\c\Chrg_Ctrl.c
 ..\obj\chrg_ctrl.o: ..\Charger_Ctrl\h\Chrg_Ctrl.h
-..\obj\chrg_ctrl.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\chrg_ctrl.o: D:\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\chrg_ctrl.o: ..\Dev\PWM\PWM.h
 ..\obj\chrg_ctrl.o: ..\STM32F10x_FWLib\inc\stm32f10x_rcc.h
 ..\obj\chrg_ctrl.o: ..\USER\stm32f10x.h
@@ -33,7 +33,7 @@
 ..\obj\chrg_ctrl.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\obj\chrg_ctrl.o: ..\RT-Thread_V3.1.3\include\rtdef.h
 ..\obj\chrg_ctrl.o: ..\RT-Thread_V3.1.3\bsp\rtconfig.h
-..\obj\chrg_ctrl.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdarg.h
+..\obj\chrg_ctrl.o: D:\ARM\ARMCC\Bin\..\include\stdarg.h
 ..\obj\chrg_ctrl.o: ..\Dev\GPIO\GPIO.h
 ..\obj\chrg_ctrl.o: ..\Dev\ADC\MCU_ADC.h
 ..\obj\chrg_ctrl.o: ..\RT-Thread_V3.1.3\include\rtthread.h

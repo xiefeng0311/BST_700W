@@ -1,17 +1,17 @@
 ..\obj\board.o: ..\RT-Thread_V3.1.3\bsp\board.c
-..\obj\board.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\board.o: D:\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\board.o: ..\RT-Thread_V3.1.3\include\rthw.h
 ..\obj\board.o: ..\RT-Thread_V3.1.3\include\rtthread.h
 ..\obj\board.o: ..\RT-Thread_V3.1.3\bsp\rtconfig.h
 ..\obj\board.o: ..\RT-Thread_V3.1.3\include\rtdebug.h
 ..\obj\board.o: ..\RT-Thread_V3.1.3\include\rtdef.h
-..\obj\board.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdarg.h
+..\obj\board.o: D:\ARM\ARMCC\Bin\..\include\stdarg.h
 ..\obj\board.o: ..\RT-Thread_V3.1.3\include\rtservice.h
 ..\obj\board.o: ..\RT-Thread_V3.1.3\include\rtm.h
 ..\obj\board.o: ..\RT-Thread_V3.1.3\include\rtthread.h
 ..\obj\board.o: ..\RT-Thread_V3.1.3\components\finsh\finsh_api.h
 ..\obj\board.o: ..\Dev\usart\usart.h
-..\obj\board.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdio.h
+..\obj\board.o: D:\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\board.o: ..\SYSTEM\sys\sys.h
 ..\obj\board.o: ..\USER\stm32f10x.h
 ..\obj\board.o: ..\CORE\core_cm3.h

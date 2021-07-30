@@ -1,6 +1,6 @@
 ..\obj\gpio.o: ..\Dev\GPIO\GPIO.c
 ..\obj\gpio.o: ..\Dev\GPIO\GPIO.h
-..\obj\gpio.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\gpio.o: D:\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\gpio.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\obj\gpio.o: ..\USER\stm32f10x.h
 ..\obj\gpio.o: ..\CORE\core_cm3.h
@@ -32,15 +32,16 @@
 ..\obj\gpio.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\obj\gpio.o: ..\RT-Thread_V3.1.3\include\rtdef.h
 ..\obj\gpio.o: ..\RT-Thread_V3.1.3\bsp\rtconfig.h
-..\obj\gpio.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdarg.h
+..\obj\gpio.o: D:\ARM\ARMCC\Bin\..\include\stdarg.h
 ..\obj\gpio.o: ..\RT-Thread_V3.1.3\include\rtthread.h
 ..\obj\gpio.o: ..\RT-Thread_V3.1.3\include\rtdebug.h
 ..\obj\gpio.o: ..\RT-Thread_V3.1.3\include\rtservice.h
 ..\obj\gpio.o: ..\RT-Thread_V3.1.3\include\rtm.h
 ..\obj\gpio.o: ..\RT-Thread_V3.1.3\include\rtthread.h
 ..\obj\gpio.o: ..\RT-Thread_V3.1.3\components\finsh\finsh_api.h
-..\obj\gpio.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdio.h
+..\obj\gpio.o: D:\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\gpio.o: ..\Dev\PWM\PWM.h
 ..\obj\gpio.o: ..\Charger_Ctrl\h\Chrg_Ctrl.h
 ..\obj\gpio.o: ..\SYSTEM\delay\delay.h
 ..\obj\gpio.o: ..\SYSTEM\sys\sys.h
+..\obj\gpio.o: ..\Dev\timer\drv_time.h

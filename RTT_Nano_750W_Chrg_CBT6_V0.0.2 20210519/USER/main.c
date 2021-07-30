@@ -13,7 +13,7 @@
  int main(void)
  {	
     static uint16_t record = 0;
-    mcu_gpio_init();
+//    mcu_gpio_init();
     while(1) {
       
     }

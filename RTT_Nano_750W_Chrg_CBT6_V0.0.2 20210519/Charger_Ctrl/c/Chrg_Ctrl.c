@@ -47,7 +47,7 @@ CHRG_CTRL_STR  chrg_ctrl_obj = {
     .V_BAT1 = 0,
     .V_BAT2 = 0,
     .FdBack_CTRL_Channel = 0,
-    .CHRG_STT = NO_Loader,
+    .CHRG_STT = CC_CHRG,
     .IPP_Adjust = WAITING,
     .PRE_I_Adjust = UnFinished,
     .CC_I_Adjust = UnFinished,
@@ -85,7 +85,8 @@ static void I_thread_entry(void* parameter) {
             I_chrg_ctrl_obj.I_Avrg_Flags = Finished;
             I_chrg_ctrl_obj.I_Period_Flags = UnFinished;
         }
-    }
+        rt_thread_mdelay(10);
+    } 
 }
 
 void I_thread_init(void) {
@@ -175,6 +176,7 @@ static void V_thread_entry(void * parameter)
                 chrg_ctrl_obj.CHRG_STT = BAT_High_FAULT;
             }
         }
+        rt_thread_mdelay(10);
     }
 }
 
@@ -192,15 +194,7 @@ void V_thread_init(void)
 }
 INIT_APP_EXPORT(V_thread_init);                                 //初始化电压线程
 
-/**
- * @brief 定义充电器管理线程
- * @brief 此线程主要用于充电的充电管理
- */
-static struct rt_thread CHRG_CTRL_thread;
-/* 定义线程控栈时要求RT_ALIGN_SIZE个字节对齐 */
-ALIGN(RT_ALIGN_SIZE)
-/* 定义栈空间大小 */
-static rt_uint8_t CHRG_CTRL_thread_stack[256];
+
 
 static void chargering_start(void)
 {
@@ -249,7 +243,7 @@ static void Pre_Chargering(void)
                 } else {
                     
                     chrg_ctrl_obj.IPP_Adjust = EXECUTING;           //开始执行纹波的调节
-                    chrg_ctrl_obj.PRE_I_Adjust = Finished;          //不再调整中心电流
+                    chrg_ctrl_obj.PRE_I_Adjust = Finished;          //中心电流调整完成
                 }
             }
         } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
@@ -335,6 +329,7 @@ static void Chargering_ctrl()
         if (chrg_ctrl_obj.CHRG_STT == PRE_CHRG) {
             Pre_Chargering();
         } else if (chrg_ctrl_obj.CHRG_STT == CC_CHRG) {
+            CC_Chargering();
         }
     }
 }
@@ -343,12 +338,38 @@ static void Chargering_ctrl()
 static void CHRG_CTRL_thread_entry(void * parameter) 
 {
     while (1) {
-        if (chrg_ctrl_obj.CHRG_STT == NO_Loader) {
-            chrg_stop();
-        } else if ((chrg_ctrl_obj.CHRG_STT == BAT_Low_FAULT) || (chrg_ctrl_obj.CHRG_STT == BAT_High_FAULT)) {
-            BAT_Fault();
-        } else  {
-            Chargering_ctrl();
-        } 
+        Chargering_ctrl();                                      //直接启动
+        // if (chrg_ctrl_obj.CHRG_STT == NO_Loader) {
+        //     chrg_stop();
+        // } else if ((chrg_ctrl_obj.CHRG_STT == BAT_Low_FAULT) || (chrg_ctrl_obj.CHRG_STT == BAT_High_FAULT)) {
+        //     BAT_Fault();
+        // } else  {
+        //     Chargering_ctrl();
+        // } 
+        rt_thread_mdelay(10);
     }
 }
+
+/**
+ * @brief 定义充电器管理线程
+ * @brief 此线程主要用于充电的充电管理
+ */
+static struct rt_thread CHRG_CTRL_thread;
+/* 定义线程控栈时要求RT_ALIGN_SIZE个字节对齐 */
+ALIGN(RT_ALIGN_SIZE)
+/* 定义栈空间大小 */
+static rt_uint8_t CHRG_CTRL_thread_stack[256];
+
+void CHRG_CTRL_thread_init(void)
+{
+    rt_thread_init(&CHRG_CTRL_thread,                                   //线程控制块
+                "CHRG_CTRL_thread",                                    //线程名字
+                CHRG_CTRL_thread_entry,                                 //线程入口函数
+                RT_NULL,                                        //线程入口参数
+                &CHRG_CTRL_thread_stack[0],                          //线程栈起始地址
+                sizeof(CHRG_CTRL_thread_stack),                      //线程栈大小
+                4,                                              //线程优先级
+                20); 
+    rt_thread_startup(&CHRG_CTRL_thread);                               //启动电压控制线程
+}
+INIT_APP_EXPORT(CHRG_CTRL_thread_init);                                 //初始化电压线程

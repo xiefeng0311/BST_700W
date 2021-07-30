@@ -3,8 +3,12 @@
 #include "rtdef.h"
 #include "stm32f10x_tim.h"
 #include "misc.h"
+#include "PWM.h"
+#include "MCU_ADC.h"
 #include "stm32f10x_rcc.h"
 #include "stm32f10x.h"
+#include "rtthread.h"
+#include  "Chrg_Ctrl.h"
 
 
 static uint16_t times_count = 0;
@@ -24,10 +28,11 @@ void Time3_Init(uint16_t arr, uint16_t psc)
     TIM_TimeBaseStructure.TIM_Prescaler = psc;                          //set prescaler
     TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;             //set clock
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;         //set counter direction
-    TIM_TimeBaseStructure.TIM_Period = (arr<2)?1:arr-1;		            //设置计数溢出大小，每计period个数就产生一个更新事件
+    TIM_TimeBaseStructure.TIM_Period = (arr<2) ? 1:arr-1;		            //设置计数溢出大小，每计period个数就产生一个更新事件
     TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);                     //initialize TIM3 
     //
     TIM_ARRPreloadConfig(TIM3, DISABLE);					            //禁止ARR预装载缓冲器
+	//TIM_ARRPreloadConfig(TIM3, ENABLE);					            //禁止ARR预装载缓冲器
 
     /* Configure NVIC */
     NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;                     //TIM3 global Interrupt 
@@ -64,19 +69,34 @@ void Time3_Stop(void)
 //Tim3 用于同步信号超5ms保护
 void TIM3_IRQHandler(void)
 {
-    if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET) {	
+    if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET) {
+        
         if (ACSingal_In() == 1) {
             times_count++;
-            if (times_count >= 5) {
-                power_on_disenabled();
-                Time3_Stop();
-                times_count = 0;
-            }
         } else {
-            times_count = 0;
             Time3_Stop();
+            times_count = 0;
         }
+        if (times_count >= 5) {
+            PWM_stop(I1_2_PWM_src);
+            power_on_disenabled();
+            Time3_Stop();
+            times_count = 0;
+            pwm_step = 0;
+            // if (ACSingal_In() == 1) {
+            //     PWM_stop(I1_2_PWM_src);
+            //     power_on_disenabled();
+            //     Time3_Stop();
+			// 	I_chrg_ctrl_obj.I_Collect_Times = 0;
+            //     times_count = 0;
+            //     pwm_step = 0;
+            // } else {
+            //     Time3_Stop();
+            //     times_count = 0;
+            // }
+        }	 
         TIM_ClearITPendingBit(TIM3, TIM_FLAG_Update); 
 	}
+	
 }
 

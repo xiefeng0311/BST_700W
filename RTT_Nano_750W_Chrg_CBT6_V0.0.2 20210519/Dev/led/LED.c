@@ -49,10 +49,10 @@ void led_ctrl_function(LED_CTRL LED_CTRL_STR)
 }
 
 /*------------------------------------------定义LED控制结构体----------------------------------------------*/
-LED_CTRL led_ctrl_struct = {
-    .LED_NUM = NO_LED,
-    .LED_status = LED_Dark,
-    .led_work_times = 0,
+LED_CTRL led1_ctrl_struct = {
+    .LED_NUM = LED1,
+    .LED_status = LED_Bright,
+    .led_work_times = 500,
     .p_led_ctrl = led_ctrl_function,
 };
 
@@ -68,8 +68,9 @@ static rt_uint8_t rt_led_thread_stack[256];
 
 static void led_thread_entry(void* parameter) {
     while (1) {
-        led_ctrl_struct.p_led_ctrl(led_ctrl_struct);
+        led1_ctrl_struct.p_led_ctrl(led1_ctrl_struct);
     }
+    rt_thread_mdelay(10);
 }
 
 void led_thread_init()

@@ -2,7 +2,7 @@
 ..\obj\can.o: ..\Dev\CAN\CAN.h
 ..\obj\can.o: ..\USER\stm32f10x.h
 ..\obj\can.o: ..\CORE\core_cm3.h
-..\obj\can.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\can.o: D:\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\can.o: ..\USER\system_stm32f10x.h
 ..\obj\can.o: ..\USER\stm32f10x_conf.h
 ..\obj\can.o: ..\STM32F10x_FWLib\inc\stm32f10x_adc.h
@@ -31,7 +31,7 @@
 ..\obj\can.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\obj\can.o: ..\RT-Thread_V3.1.3\include\rtdef.h
 ..\obj\can.o: ..\RT-Thread_V3.1.3\bsp\rtconfig.h
-..\obj\can.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdarg.h
+..\obj\can.o: D:\ARM\ARMCC\Bin\..\include\stdarg.h
 ..\obj\can.o: ..\RT-Thread_V3.1.3\include\rtthread.h
 ..\obj\can.o: ..\RT-Thread_V3.1.3\include\rtdebug.h
 ..\obj\can.o: ..\RT-Thread_V3.1.3\include\rtservice.h

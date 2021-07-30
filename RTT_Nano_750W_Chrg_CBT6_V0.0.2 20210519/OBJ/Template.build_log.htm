@@ -5,11 +5,11 @@
 <h2>Tool Versions:</h2>
 IDE-Version: ��Vision V5.25.2.0
 Copyright (C) 2018 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: feng xie, NUPO, LIC=TIVNB-25ICK-30JNC-74VQ7-QM631-9N9P9
+License Information: Aaron HP Inc., HP Inc., LIC=Y2BSB-22Z32-152TV-PDM5M-16VJ4-SEQSY
  
 Tool Versions:
-Toolchain:       MDK-ARM Plus  Version: 5.25.2.0
-Toolchain Path:  D:\Program Files\MDK\ARM\ARMCC\Bin
+Toolchain:       MDK-ARM Professional  Version: 5.25.2.0
+Toolchain Path:  D:\ARM\ARMCC\Bin
 C Compiler:      Armcc.exe V5.06 update 6 (build 750)
 Assembler:       Armasm.exe V5.06 update 6 (build 750)
 Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
@@ -21,13 +21,76 @@ Target DLL:      Segger\JL2CM3.dll V2.99.29.0
 Dialog DLL:      TCM.DLL V1.35.1.0
  
 <h2>Project:</h2>
-F:\work\02_BST\NUPO\Charger\BST_750W\Software\Charger_Data\Digital_Power_B\RTT_Nano_750W_Chrg_CBT6_V0.0.2 20210519\USER\RTT_750W_Chrg_CBT6_V0.0.1.uvprojx
-Project File Date:  07/07/2021
+H:\NUPO\Work\Charger\750W\Software\Digital_Power_B\BST_700W\RTT_Nano_750W_Chrg_CBT6_V0.0.2 20210519\USER\RTT_750W_Chrg_CBT6_V0.0.1.uvprojx
+Project File Date:  07/28/2021
 
 <h2>Output:</h2>
-*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Program Files\MDK\ARM\ARMCC\Bin'
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\ARM\ARMCC\Bin'
 Build target 'RTT_750_Charger_v0.0.1'
-"..\OBJ\Template.axf" - 0 Error(s), 0 Warning(s).
+compiling drv_timer.c...
+..\Dev\timer\drv_timer.c(56): warning:  #144-D: a value of type "void (*)(void)" cannot be used to initialize an entity of type "const init_fn_t"
+  INIT_DEVICE_EXPORT(Time3_Init_interfaces);
+..\Dev\timer\drv_timer.c: 1 warning, 0 errors
+compiling MCU_ADC.c...
+..\Dev\led\LED.h(21): warning:  #47-D: incompatible redefinition of macro "LED3_ON"  (declared at line 33 of "..\Dev\GPIO\GPIO.h")
+  #define  LED3_ON					            GPIO_SetBits(LED3_Port, LED3_PIN)	
+..\Dev\led\LED.h(22): warning:  #47-D: incompatible redefinition of macro "LED3_OFF"  (declared at line 34 of "..\Dev\GPIO\GPIO.h")
+  #define  LED3_OFF					            GPIO_ResetBits(LED3_Port, LED3_PIN)
+..\Dev\ADC\MCU_ADC.c(126): warning:  #940-D: missing return statement at end of non-void function "get_frq" 
+  }
+..\Dev\ADC\MCU_ADC.c(412): warning:  #177-D: variable "m"  was declared but never referenced
+      uint16_t m = 0;
+..\Dev\ADC\MCU_ADC.c(433): warning:  #177-D: variable "full_flag"  was declared but never referenced
+      static uint8_t full_flag = 0;
+..\Dev\ADC\MCU_ADC.c(571): warning:  #177-D: variable "i"  was declared but never referenced
+      static uint16_t i = CHRG1I_CHNL4;
+..\Dev\ADC\MCU_ADC.c(618): warning:  #550-D: variable "data_breadth"  was set but never used
+      uint16_t data_breadth = 0;
+..\Dev\ADC\MCU_ADC.c(647): warning:  #177-D: variable "data_times"  was declared but never referenced
+      static uint16_t data_times = 0;
+..\Dev\ADC\MCU_ADC.c(649): warning:  #177-D: variable "i"  was declared but never referenced
+      static uint16_t i = 0;
+..\Dev\ADC\MCU_ADC.c(650): warning:  #550-D: variable "Wave_I"  was set but never used
+      uint16_t Wave_I = 0;
+..\Dev\ADC\MCU_ADC.c(651): warning:  #177-D: variable "n"  was declared but never referenced
+      uint16_t n = 0;
+..\Dev\ADC\MCU_ADC.c(59): warning:  #177-D: variable "I_min"  was declared but never referenced
+  static uint16_t I_min = 0;
+..\Dev\ADC\MCU_ADC.c(60): warning:  #177-D: variable "I_max"  was declared but never referenced
+  static uint16_t I_max = 0;
+..\Dev\ADC\MCU_ADC.c(61): warning:  #177-D: variable "I_min_record"  was declared but never referenced
+  static uint16_t I_min_record = 0;
+..\Dev\ADC\MCU_ADC.c(62): warning:  #177-D: variable "I_max_record"  was declared but never referenced
+  static uint16_t I_max_record = 0;
+..\Dev\ADC\MCU_ADC.c(63): warning:  #177-D: variable "record_mark"  was declared but never referenced
+  static uint16_t record_mark = 0;
+..\Dev\ADC\MCU_ADC.c(65): warning:  #177-D: variable "avrg_bf_numb"  was declared but never referenced
+  static uint16_t avrg_bf_numb = 0;                           //滤波缓冲区数
+..\Dev\ADC\MCU_ADC.c(66): warning:  #177-D: variable "finish_flag"  was declared but never referenced
+  static uint16_t finish_flag = 0;
+..\Dev\ADC\MCU_ADC.c(69): warning:  #177-D: variable "PFC_IN_V"  was declared but never referenced
+  static uint16_t PFC_IN_V[5] = {0, 1030, 1320, 1365, 4096};
+..\Dev\ADC\MCU_ADC.c(75): warning:  #177-D: variable "data_louth"  was declared but never referenced
+  static uint16_t data_louth = 0;
+..\Dev\ADC\MCU_ADC.c(79): warning:  #177-D: variable "ref_vbat"  was declared but never referenced
+  static uint16_t ref_vbat;
+..\Dev\ADC\MCU_ADC.c(103): warning:  #177-D: variable "CHRG_channel"  was declared but never referenced
+  static CHRG_CHL CHRG_channel;
+..\Dev\ADC\MCU_ADC.c(322): warning:  #177-D: function "array_swap"  was declared but never referenced
+  static void array_swap(uint16_t (*p_original)[NbrOfChannel], uint16_t (*p_target)[NbrOfBuf])
+..\Dev\ADC\MCU_ADC.c(641): warning:  #177-D: variable "IPP_STT_RCRD"  was declared but never referenced
+  static uint8_t IPP_STT_RCRD[25] = {0};                              //纹波电流状态记�?
+..\Dev\ADC\MCU_ADC.c(642): warning:  #177-D: variable "IPP_Adjusted_Record"  was declared but never referenced
+  static uint8_t IPP_Adjusted_Record[25] = {0};                       //用于标记是否已调节过
+..\Dev\ADC\MCU_ADC.c(643): warning:  #177-D: variable "IPP_Adjust_Data_Record"  was declared but never referenced
+  static uint16_t IPP_Adjust_Data_Record[25] = {0};                   //各点纹波调整值记�?
+..\Dev\ADC\MCU_ADC.c(644): warning:  #177-D: variable "IPP_Adjust_Data"  was declared but never referenced
+  static uint16_t IPP_Adjust_Data[25] = {0};
+..\Dev\ADC\MCU_ADC.c: 27 warnings, 0 errors
+linking...
+Program Size: Code=24744 RO-data=1280 RW-data=800 ZI-data=10176  
+FromELF: creating hex file...
+"..\OBJ\Template.axf" - 0 Error(s), 28 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -38,10 +101,10 @@ Package Vendor: Keil
 
 <h2>Collection of Component include folders:</h2>
   .\RTE\_RTT_750_Charger_v0.0.1
-  D:\Program Files\MDK\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include
+  D:\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:07
 </pre>
 </body>
 </html>

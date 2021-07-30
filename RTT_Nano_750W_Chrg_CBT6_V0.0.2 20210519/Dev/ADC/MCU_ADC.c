@@ -61,7 +61,7 @@ static uint16_t I_max = 0;
 static uint16_t I_min_record = 0;
 static uint16_t I_max_record = 0;
 static uint16_t record_mark = 0;
-static uint16_t pwm_step = 0;
+
 static uint16_t avrg_bf_numb = 0;                           //滤波缓冲区数
 static uint16_t finish_flag = 0;
 
@@ -76,9 +76,11 @@ static uint16_t data_louth = 0;
 
 static uint16_t data_count = 0;
 
+static uint16_t ref_vbat;
+
 uint16_t adc_finish_flag;
 
-static uint16_t ref_vbat;
+uint16_t pwm_step = 0;
 
 uint16_t ADCConvertedValue[NbrOfChannel] = {0};                             //DMA转换通道数组
 
@@ -605,7 +607,7 @@ void Chrg_adc_acquisition_thread(void)
 
     return ;
 }
-INIT_APP_EXPORT(Chrg_adc_acquisition_thread);
+//INIT_APP_EXPORT(Chrg_adc_acquisition_thread);
 
 
 
@@ -636,10 +638,10 @@ void  CHRG_PID_process_thread(void)
  * @brief 电流纹波调整函数（只在目标电流已经调整好，才开始调整纹波电流）
  * @brief 纹波调整不关心具体那一路反馈控制，只根据当前状态调整到目标电流
  */
-static uint8_t IPP_STT_RCRD[15] = {0};                              //纹波电流状态记录
-static uint8_t IPP_Adjusted_Record[15] = {0};                       //用于标记是否已调节过
-static uint16_t IPP_Adjust_Data_Record[15] = {0};                   //各点纹波调整值记录
-static uint16_t IPP_Adjust_Data[15] = {0};
+static uint8_t IPP_STT_RCRD[25] = {0};                              //纹波电流状态记录
+static uint8_t IPP_Adjusted_Record[25] = {0};                       //用于标记是否已调节过
+static uint16_t IPP_Adjust_Data_Record[25] = {0};                   //各点纹波调整值记录
+static uint16_t IPP_Adjust_Data[25] = {0};
 void current_pp_adjust(uint16_t target_I)
 {
     static uint16_t data_times = 0;
@@ -650,178 +652,215 @@ void current_pp_adjust(uint16_t target_I)
     //uint16_t pwm_data = 0;
     Wave_I = target_I / 10;
     if (pp_adjust_step == step0) {
-        data_times++;
-        if (period_signl_recd >= 2) {
-            data_num = data_times / Data_Border;                         //均分观测点    
-            pp_adjust_step = step1;
-            data_times = 0;
-            period_signl_recd = 0;                              //重新开始
-        }
+        // data_times++;
+        // if (period_signl_recd >= 2) {
+        //     data_num = data_times / Data_Border;                         //均分观测点    
+        //     pp_adjust_step = step1;
+        //     data_times = 0;
+        //     period_signl_recd = 0;                              //重新开始
+        // }
     } else if (pp_adjust_step == step1) {
-        if (period_signl_recd < 2) {
-            data_times++;
-            if (data_times >= ((i+1) * Data_Border)) {
-                if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle1) {
-                    if (chrg_ctrl_obj.I_Channel1 < (target_I - Wave_I)) {
-                        IPP_STT_RCRD[i] = LOWER;
-                    } else if (chrg_ctrl_obj.I_Channel1 > (target_I + Wave_I)) {
-                        IPP_STT_RCRD[i] = HIGHER;
-                    } else {
-                        IPP_STT_RCRD[i] = 0;
-                    }
-                } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
-                    if (chrg_ctrl_obj.I_Channel2 < (target_I - Wave_I)) {
-                        IPP_STT_RCRD[i] = LOWER;
-                    } else if (chrg_ctrl_obj.I_Channel2 > (target_I + Wave_I)) {
-                        IPP_STT_RCRD[i] = HIGHER;
-                    } else {
-                        IPP_STT_RCRD[i] = 0;
-                    }
-                }
-                i++;
-                if (i == data_num) {
-                    i = 0;
-                    data_times = 0;
-                    pp_adjust_step = step2;
-                    period_signl_recd = 0;
-                }
-            }
-        } else {
-            i = 0;
-            data_times = 0;
-            pp_adjust_step = step2;
-            period_signl_recd = 0;
-        }
+        rt_kprintf("data_num = %d\n\n", data_num);
+        // if (period_signl_recd < 2) {
+        //     data_times++;
+        //     if (data_times >= ((i+1) * Data_Border)) {
+        //         if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle1) {
+        //             if (chrg_ctrl_obj.I_Channel1 < (target_I - Wave_I)) {
+        //                 IPP_STT_RCRD[i] = LOWER;
+        //             } else if (chrg_ctrl_obj.I_Channel1 > (target_I + Wave_I)) {
+        //                 IPP_STT_RCRD[i] = HIGHER;
+        //             } else {
+        //                 IPP_STT_RCRD[i] = 0;
+        //             }
+        //         } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
+        //             if (chrg_ctrl_obj.I_Channel2 < (target_I - Wave_I)) {
+        //                 IPP_STT_RCRD[i] = LOWER;
+        //             } else if (chrg_ctrl_obj.I_Channel2 > (target_I + Wave_I)) {
+        //                 IPP_STT_RCRD[i] = HIGHER;
+        //             } else {
+        //                 IPP_STT_RCRD[i] = 0;
+        //             }
+        //         }
+        //         i++;
+        //         if (i == data_num) {
+        //             i = 0;
+        //             data_times = 0;
+        //             pp_adjust_step = step2;
+        //             period_signl_recd = 0;
+        //         }
+        //     }
+        // } else {
+        //     i = 0;
+        //     data_times = 0;
+        //     pp_adjust_step = step2;
+        //     period_signl_recd = 0;
+        // }
     } else if (pp_adjust_step == step2) {
-        if (period_signl_recd < 2) {
-            data_times++;
-            n = data_times / Data_Border;
-            if (IPP_Adjusted_Record[n] == UnFinished) {
-                if (IPP_STT_RCRD[n] == LOWER) {
-                    if (IPP_Adjust_Data_Record[n] == 0) {
-                        IPP_Adjust_Data_Record[n] = get_PWM_Paramet();
-                        IPP_Adjust_Data_Record[n]--;
-                    } else {
-                        IPP_Adjust_Data_Record[n]--;
-                    }
-                    set_f(IPP_Adjust_Data_Record[n]);
-                } else if (IPP_STT_RCRD[n] == HIGHER) {
-                    if (IPP_Adjust_Data_Record[n] == 0) {
-                        IPP_Adjust_Data_Record[n] = get_PWM_Paramet();
-                        IPP_Adjust_Data_Record[n]++;
-                    } else {
-                        IPP_Adjust_Data_Record[n]++;
-                    }
-                    set_f(IPP_Adjust_Data_Record[n]);
-                } 
-                IPP_Adjusted_Record[n] = Finished;
-            } 
-            if (data_times >= ((i+1) * Data_Border)) {
-                if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle1) {
-                    if (chrg_ctrl_obj.I_Channel1 < (target_I - Wave_I)) {
-                        IPP_STT_RCRD[i] = LOWER;
-                    } else if (chrg_ctrl_obj.I_Channel1 > (target_I + Wave_I)) {
-                        IPP_STT_RCRD[i] = HIGHER;
-                    } else {
-                        IPP_STT_RCRD[i] = 0;
-                    }
-                } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
-                    if (chrg_ctrl_obj.I_Channel2 < (target_I - Wave_I)) {
-                        IPP_STT_RCRD[i] = LOWER;
-                    } else if (chrg_ctrl_obj.I_Channel2 > (target_I + Wave_I)) {
-                        IPP_STT_RCRD[i] = HIGHER;
-                    } else {
-                        IPP_STT_RCRD[i] = 0;
-                    }
-                }
-                i++;
-                if (i == data_num) {
-                    i = 0;
-                    data_times = 0;
-                    period_signl_recd = 0;
-                    for (n = 0; n < data_num; n++) {
-                        IPP_STT_RCRD[n] = UnFinished;
-                    }
-                }
-            }
-        } else {
-            i = 0;
-            data_times = 0;
-            period_signl_recd = 0;
-            for (n = 0; n < data_num; n++) {
-                IPP_STT_RCRD[n] = UnFinished;
-            }
-        }
+        // if (period_signl_recd < 2) {
+        //     data_times++;
+        //     n = data_times / Data_Border;
+        //     if (IPP_Adjusted_Record[n] == UnFinished) {
+        //         if (IPP_STT_RCRD[n] == LOWER) {
+        //             if (IPP_Adjust_Data_Record[n] == 0) {
+        //                 IPP_Adjust_Data_Record[n] = get_PWM_Paramet();
+        //                 IPP_Adjust_Data_Record[n]++;
+        //             } else {
+        //                 IPP_Adjust_Data_Record[n]++;
+        //             }
+        //             set_f(IPP_Adjust_Data_Record[n]);
+        //         } else if (IPP_STT_RCRD[n] == HIGHER) {
+        //             if (IPP_Adjust_Data_Record[n] == 0) {
+        //                 IPP_Adjust_Data_Record[n] = get_PWM_Paramet();
+        //                 IPP_Adjust_Data_Record[n]--;
+        //             } else {
+        //                 IPP_Adjust_Data_Record[n]--;
+        //             }
+        //             set_f(IPP_Adjust_Data_Record[n]);
+        //         } 
+        //         IPP_Adjusted_Record[n] = Finished;
+        //     } 
+        //     if (data_times >= ((i+1) * Data_Border)) {
+        //         if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle1) {
+        //             if (chrg_ctrl_obj.I_Channel1 < (target_I - Wave_I)) {
+        //                 IPP_STT_RCRD[i] = LOWER;
+        //             } else if (chrg_ctrl_obj.I_Channel1 > (target_I + Wave_I)) {
+        //                 IPP_STT_RCRD[i] = HIGHER;
+        //             } else {
+        //                 IPP_STT_RCRD[i] = 0;
+        //             }
+        //         } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
+        //             if (chrg_ctrl_obj.I_Channel2 < (target_I - Wave_I)) {
+        //                 IPP_STT_RCRD[i] = LOWER;
+        //             } else if (chrg_ctrl_obj.I_Channel2 > (target_I + Wave_I)) {
+        //                 IPP_STT_RCRD[i] = HIGHER;
+        //             } else {
+        //                 IPP_STT_RCRD[i] = 0;
+        //             }
+        //         }
+        //         i++;
+        //         if (i == data_num) {
+        //             i = 0;
+        //             data_times = 0;
+        //             period_signl_recd = 0;
+        //             for (n = 0; n < data_num; n++) {
+        //                 IPP_STT_RCRD[n] = UnFinished;
+        //             }
+        //         }
+        //     }
+        // } else {
+        //     i = 0;
+        //     data_times = 0;
+        //     period_signl_recd = 0;
+        //     for (n = 0; n < data_num; n++) {
+        //         IPP_STT_RCRD[n] = UnFinished;
+        //     }
+        // }
     }
+    //rt_kprintf("data_num = %d\n\n", data_num);
 }
+
+
+
 
 
 void DMA1_Channel1_IRQHandler(void)
 {
     static uint32_t delay = 0;
-    static uint32_t status_mb = 0;
-    static uint16_t times = 0;
-    uint16_t i = 0;
-    delay++;
+    static uint16_t start_rcd_times = 0;
+    
     if (DMA_GetITStatus(DMA1_IT_TC1)) {
-        record_mark = 1;
-        if (record_mark == 1) {
-            if (pwm_step == 0) {
-                CHRG_ADC_Value.PFC_Vin = array_average(ADCConvertedValue, PFCVin_CHNL7, NbrOfBuf);
-                if (delay >= 20000) {
-                    if (ACSingal_In() == 0) {
-                        if ((PFC_STOPV < CHRG_ADC_Value.PFC_Vin) && (CHRG_ADC_Value.PFC_Vin < PFC_STV)) {
-                            PWM_start(I1_2_PWM_src);
-                            pwm_step = 1;
-                        }
-                    }
-                }
-            }else if (pwm_step == 1) {
-                if (delay >= 32000) {
+        if (pwm_step == 0) {
+            delay = 0;
+            start_rcd_times = 0;
+            I_chrg_ctrl_obj.I_Collect_Times = 0;
+            if (ACSingal_In() == 0) {
+                pwm_step = 1;
+                start_rcd_times = 1;
+            } else {
+                start_rcd_times = 0;
+            }
+        }
+        if (start_rcd_times == 1) {
+            delay++;
+        }
+
+        if (pwm_step == 1) {
+            if (delay >= 20000) {
+                if (ACSingal_In() == 0) {
+                    power_on_enabled();
                     pwm_step = 2;
-                    delay = 0;
                 }
-            } else if (pwm_step == 2) {
-                adc_data_carry(AC_Singal_Parameter.ADC_data_array, ADCConvertedValue);
-                ADC_filter(ADCConvertedBuf, ADCConvertedValue);
-                if (chrg_ctrl_obj.CHRG_STT == PRE_CHRG) {
-                    if  (chrg_ctrl_obj.PRE_I_Adjust == UnFinished) {            //调整中心电流值
-                        if (period_signl_recd >= 1) {                           //同步信号首次出现
+            }
+        }else if (pwm_step == 2) {
+            CHRG_ADC_Value.PFC_Vin = array_average(ADCConvertedValue, PFCVin_CHNL7, NbrOfBuf);
+            if (delay >= 32000) {
+                if (CHRG_ADC_Value.PFC_Vin < PFC_STOPV) {
+                    power_on_disenabled();
+                    PWM_stop(I1_2_PWM_src);
+                    pwm_step = 0;
+                    
+                } else if (CHRG_ADC_Value.PFC_Vin <= PFC_STV) {
+                    PWM_start(I1_2_PWM_src);
+                    pwm_step = 3;
+                } else {
+                    //降额
+                    PWM_start(I1_2_PWM_src);
+                    pwm_step = 3;
+                }
+                delay = 0;
+            }
+        } else if (pwm_step == 3) {
+			CHRG_ADC_Value.PFC_Vin = array_average(ADCConvertedValue, PFCVin_CHNL7, NbrOfBuf);
+            adc_data_carry(AC_Singal_Parameter.ADC_data_array, ADCConvertedValue);
+            ADC_filter(ADCConvertedBuf, ADCConvertedValue);
+            if (chrg_ctrl_obj.CHRG_STT == PRE_CHRG) {
+                if  (chrg_ctrl_obj.PRE_I_Adjust == UnFinished) {            //调整中心电流值
+                    if (period_signl_recd >= 1) {                           //同步信号首次出现
+                        if (I_chrg_ctrl_obj.I_Period_Flags == UnFinished) {
                             I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = AC_Singal_Parameter.I1;
                             I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = AC_Singal_Parameter.I2;
                             I_chrg_ctrl_obj.I_Collect_Times++;
-                            if (period_signl_recd >= 2) {
-                                I_chrg_ctrl_obj.I_Period_Flags = Finished;          //一个周期数据采集完成
-                                period_signl_recd = 0;
-                            }
                         }
-                    } else if (chrg_ctrl_obj.PRE_I_Adjust == Finished) {        //开始调整纹波电流值
-                        if (period_signl_recd >= 1) {                           //同步信号出现开始调整纹波电流
-                            current_pp_adjust(PRE_I);
+                        if (period_signl_recd >= 2) {
+                            I_chrg_ctrl_obj.I_Period_Flags = Finished;          //一个周期数据采集完成
+                            period_signl_recd = 0;
                         }
                     }
-                    
-                } else if (chrg_ctrl_obj.CHRG_STT == CC_CHRG) {
-                    if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
-                        if (period_signl_recd >= 1) {
+                } else if (chrg_ctrl_obj.PRE_I_Adjust == Finished) {        //开始调整纹波电流值
+                    if (period_signl_recd >= 1) {                           //同步信号出现开始调整纹波电流
+                        current_pp_adjust(PRE_I);
+                    }
+                }
+                
+            } else if (chrg_ctrl_obj.CHRG_STT == CC_CHRG) {
+                if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
+                    if (period_signl_recd >= 1) {
+                        if (I_chrg_ctrl_obj.I_Period_Flags == UnFinished) {
                             I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = AC_Singal_Parameter.I1;
                             I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = AC_Singal_Parameter.I2;
                             I_chrg_ctrl_obj.I_Collect_Times++;
-                            if (period_signl_recd >= 2) {
-                                I_chrg_ctrl_obj.I_Period_Flags = Finished;          //电流一个周期数据采集完成
-                                period_signl_recd = 0;
-                            }
                         }
-                    } else if (chrg_ctrl_obj.CC_I_Adjust == Finished) {
-                        if (period_signl_recd >= 1) {                           //同步信号出现开始调整纹波电流
-                            current_pp_adjust(CC_I);
+                        if (period_signl_recd >= 2) {
+                            I_chrg_ctrl_obj.I_Period_Flags = Finished;          //电流一个周期数据采集完成
+                            period_signl_recd = 0;
                         }
+                    }
+                } else if (chrg_ctrl_obj.CC_I_Adjust == Finished) {
+                    if (period_signl_recd >= 1) {                           //同步信号出现开始调整纹波电流
+                        current_pp_adjust(CC_I);
                     }
                 }
             }
-            record_mark = 0;
+            if (CHRG_ADC_Value.PFC_Vin < PFC_STOPV) {
+                    power_on_disenabled();
+                    PWM_stop(I1_2_PWM_src);
+                    pwm_step = 0;
+                } else if (CHRG_ADC_Value.PFC_Vin > PFC_LPV) {
+                    //限功率
+                } 
         }
-    DMA_ClearITPendingBit(DMA1_IT_TC1); 
+
+        DMA_ClearITPendingBit(DMA1_IT_TC1); 
     }
 }
 

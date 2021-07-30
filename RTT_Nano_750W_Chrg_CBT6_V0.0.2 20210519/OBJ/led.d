@@ -1,6 +1,6 @@
 ..\obj\led.o: ..\Dev\led\LED.c
 ..\obj\led.o: ..\Dev\led\LED.h
-..\obj\led.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\led.o: D:\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\led.o: ..\STM32F10x_FWLib\inc\stm32f10x_gpio.h
 ..\obj\led.o: ..\USER\stm32f10x.h
 ..\obj\led.o: ..\CORE\core_cm3.h
@@ -34,7 +34,7 @@
 ..\obj\led.o: ..\RT-Thread_V3.1.3\bsp\rtconfig.h
 ..\obj\led.o: ..\RT-Thread_V3.1.3\include\rtdebug.h
 ..\obj\led.o: ..\RT-Thread_V3.1.3\include\rtdef.h
-..\obj\led.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdarg.h
+..\obj\led.o: D:\ARM\ARMCC\Bin\..\include\stdarg.h
 ..\obj\led.o: ..\RT-Thread_V3.1.3\include\rtservice.h
 ..\obj\led.o: ..\RT-Thread_V3.1.3\include\rtm.h
 ..\obj\led.o: ..\RT-Thread_V3.1.3\include\rtthread.h

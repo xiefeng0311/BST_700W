@@ -1,6 +1,6 @@
 ..\obj\pwm.o: ..\Dev\PWM\PWM.c
 ..\obj\pwm.o: ..\Dev\PWM\PWM.h
-..\obj\pwm.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\pwm.o: D:\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\pwm.o: ..\STM32F10x_FWLib\inc\stm32f10x_rcc.h
 ..\obj\pwm.o: ..\USER\stm32f10x.h
 ..\obj\pwm.o: ..\CORE\core_cm3.h
@@ -32,7 +32,7 @@
 ..\obj\pwm.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\obj\pwm.o: ..\RT-Thread_V3.1.3\include\rtdef.h
 ..\obj\pwm.o: ..\RT-Thread_V3.1.3\bsp\rtconfig.h
-..\obj\pwm.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdarg.h
+..\obj\pwm.o: D:\ARM\ARMCC\Bin\..\include\stdarg.h
 ..\obj\pwm.o: ..\RT-Thread_V3.1.3\include\rtthread.h
 ..\obj\pwm.o: ..\RT-Thread_V3.1.3\include\rtdebug.h
 ..\obj\pwm.o: ..\RT-Thread_V3.1.3\include\rtservice.h

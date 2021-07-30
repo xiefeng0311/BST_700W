@@ -1,6 +1,6 @@
 ..\obj\mcu_adc.o: ..\Dev\ADC\MCU_ADC.c
 ..\obj\mcu_adc.o: ..\Dev\ADC\MCU_ADC.h
-..\obj\mcu_adc.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\mcu_adc.o: D:\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\mcu_adc.o: ..\Dev\PWM\PWM.h
 ..\obj\mcu_adc.o: ..\STM32F10x_FWLib\inc\stm32f10x_rcc.h
 ..\obj\mcu_adc.o: ..\USER\stm32f10x.h
@@ -33,7 +33,7 @@
 ..\obj\mcu_adc.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\obj\mcu_adc.o: ..\RT-Thread_V3.1.3\include\rtdef.h
 ..\obj\mcu_adc.o: ..\RT-Thread_V3.1.3\bsp\rtconfig.h
-..\obj\mcu_adc.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stdarg.h
+..\obj\mcu_adc.o: D:\ARM\ARMCC\Bin\..\include\stdarg.h
 ..\obj\mcu_adc.o: ..\Dev\Config.h
 ..\obj\mcu_adc.o: ..\RT-Thread_V3.1.3\include\rtthread.h
 ..\obj\mcu_adc.o: ..\RT-Thread_V3.1.3\include\rtdebug.h
@@ -41,7 +41,7 @@
 ..\obj\mcu_adc.o: ..\RT-Thread_V3.1.3\include\rtm.h
 ..\obj\mcu_adc.o: ..\RT-Thread_V3.1.3\include\rtthread.h
 ..\obj\mcu_adc.o: ..\RT-Thread_V3.1.3\components\finsh\finsh_api.h
-..\obj\mcu_adc.o: D:\Program Files\MDK\ARM\ARMCC\Bin\..\include\stddef.h
+..\obj\mcu_adc.o: D:\ARM\ARMCC\Bin\..\include\stddef.h
 ..\obj\mcu_adc.o: ..\Dev\GPIO\GPIO.h
 ..\obj\mcu_adc.o: ..\Dev\led\LED.h
 ..\obj\mcu_adc.o: ..\Charger_Ctrl\h\Chrg_Ctrl.h
