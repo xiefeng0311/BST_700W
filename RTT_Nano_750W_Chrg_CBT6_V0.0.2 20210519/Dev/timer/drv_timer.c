@@ -83,17 +83,6 @@ void TIM3_IRQHandler(void)
             Time3_Stop();
             times_count = 0;
             pwm_step = 0;
-            // if (ACSingal_In() == 1) {
-            //     PWM_stop(I1_2_PWM_src);
-            //     power_on_disenabled();
-            //     Time3_Stop();
-			// 	I_chrg_ctrl_obj.I_Collect_Times = 0;
-            //     times_count = 0;
-            //     pwm_step = 0;
-            // } else {
-            //     Time3_Stop();
-            //     times_count = 0;
-            // }
         }	 
         TIM_ClearITPendingBit(TIM3, TIM_FLAG_Update); 
 	}
