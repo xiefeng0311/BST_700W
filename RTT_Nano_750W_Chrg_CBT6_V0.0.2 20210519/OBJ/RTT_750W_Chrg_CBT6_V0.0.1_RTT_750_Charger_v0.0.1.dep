@@ -32,7 +32,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x6100B73E)
 I (..\Dev\led\LED.h)(0x6100B73D)
 I (..\Dev\GPIO\GPIO.h)(0x6100B73D)
 I (..\Charger_Ctrl\h\Chrg_Ctrl.h)(0x6100B73D)
-I (..\Dev\PWM\PWM.h)(0x6100B73D)
+I (..\Dev\PWM\PWM.h)(0x610780D5)
 I (..\RT-Thread_V3.1.3\include\rtdef.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\bsp\rtconfig.h)(0x6100B73E)
 I (D:\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -140,10 +140,10 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x6100B73E)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x6100B73E)
 F (..\RT-Thread_V3.1.3\bsp\rtconfig.h)(0x6100B73E)()
 F (..\Charger_Ctrl\h\Chrg_Ctrl.h)(0x6100B73D)()
-F (..\Charger_Ctrl\c\Chrg_Ctrl.c)(0x610391CB)(--gnu -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\RT-Thread_V3.1.3\components\finsh -I ..\RT-Thread_V3.1.3\include -I ..\RT-Thread_V3.1.3\include\libc -I ..\RT-Thread_V3.1.3\bsp -I ..\Dev -I ..\Dev\GPIO -I ..\Dev\timer -I ..\Dev\usart -I ..\Dev\led -I ..\Dev\ADC -I ..\Dev\CAN -I ..\Dev\PWM -I ..\Charger_Ctrl\h -I ..\SYSTEM-I.\RTE\_RTT_750_Charger_v0.0.1-ID:\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-ID:\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_MD -DSTM32F103xB -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o ..\obj\chrg_ctrl.o --omf_browse ..\obj\chrg_ctrl.crf --depend ..\obj\chrg_ctrl.d)
+F (..\Charger_Ctrl\c\Chrg_Ctrl.c)(0x6107B5F1)(--gnu -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\RT-Thread_V3.1.3\components\finsh -I ..\RT-Thread_V3.1.3\include -I ..\RT-Thread_V3.1.3\include\libc -I ..\RT-Thread_V3.1.3\bsp -I ..\Dev -I ..\Dev\GPIO -I ..\Dev\timer -I ..\Dev\usart -I ..\Dev\led -I ..\Dev\ADC -I ..\Dev\CAN -I ..\Dev\PWM -I ..\Charger_Ctrl\h -I ..\SYSTEM-I.\RTE\_RTT_750_Charger_v0.0.1-ID:\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-ID:\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_MD -DSTM32F103xB -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o ..\obj\chrg_ctrl.o --omf_browse ..\obj\chrg_ctrl.crf --depend ..\obj\chrg_ctrl.d)
 I (..\Charger_Ctrl\h\Chrg_Ctrl.h)(0x6100B73D)
 I (D:\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
-I (..\Dev\PWM\PWM.h)(0x6100B73D)
+I (..\Dev\PWM\PWM.h)(0x610780D5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_rcc.h)(0x6100B73E)
 I (..\USER\stm32f10x.h)(0x6100B73E)
 I (..\CORE\core_cm3.h)(0x6100B73D)
@@ -175,7 +175,7 @@ I (..\RT-Thread_V3.1.3\include\rtdef.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\bsp\rtconfig.h)(0x6100B73E)
 I (D:\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
 I (..\Dev\GPIO\GPIO.h)(0x6100B73D)
-I (..\Dev\ADC\MCU_ADC.h)(0x6103AE41)
+I (..\Dev\ADC\MCU_ADC.h)(0x6107B5E3)
 I (..\RT-Thread_V3.1.3\include\rtthread.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\include\rtdebug.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\include\rtservice.h)(0x6100B73E)
@@ -184,10 +184,10 @@ I (..\RT-Thread_V3.1.3\components\finsh\finsh_api.h)(0x6100B73E)
 F (..\Charger_Ctrl\c\Temp_Ctrl.c)(0x6100B73D)(--gnu -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\RT-Thread_V3.1.3\components\finsh -I ..\RT-Thread_V3.1.3\include -I ..\RT-Thread_V3.1.3\include\libc -I ..\RT-Thread_V3.1.3\bsp -I ..\Dev -I ..\Dev\GPIO -I ..\Dev\timer -I ..\Dev\usart -I ..\Dev\led -I ..\Dev\ADC -I ..\Dev\CAN -I ..\Dev\PWM -I ..\Charger_Ctrl\h -I ..\SYSTEM-I.\RTE\_RTT_750_Charger_v0.0.1-ID:\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-ID:\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_MD -DSTM32F103xB -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o ..\obj\temp_ctrl.o --omf_browse ..\obj\temp_ctrl.crf --depend ..\obj\temp_ctrl.d)
 I (..\Charger_Ctrl\h\Temp_Ctrl.h)(0x6100B73D)
 I (D:\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
-F (..\Dev\ADC\MCU_ADC.c)(0x6103B193)(--gnu -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\RT-Thread_V3.1.3\components\finsh -I ..\RT-Thread_V3.1.3\include -I ..\RT-Thread_V3.1.3\include\libc -I ..\RT-Thread_V3.1.3\bsp -I ..\Dev -I ..\Dev\GPIO -I ..\Dev\timer -I ..\Dev\usart -I ..\Dev\led -I ..\Dev\ADC -I ..\Dev\CAN -I ..\Dev\PWM -I ..\Charger_Ctrl\h -I ..\SYSTEM-I.\RTE\_RTT_750_Charger_v0.0.1-ID:\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-ID:\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_MD -DSTM32F103xB -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o ..\obj\mcu_adc.o --omf_browse ..\obj\mcu_adc.crf --depend ..\obj\mcu_adc.d)
-I (..\Dev\ADC\MCU_ADC.h)(0x6103AE41)
+F (..\Dev\ADC\MCU_ADC.c)(0x6107B600)(--gnu -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\RT-Thread_V3.1.3\components\finsh -I ..\RT-Thread_V3.1.3\include -I ..\RT-Thread_V3.1.3\include\libc -I ..\RT-Thread_V3.1.3\bsp -I ..\Dev -I ..\Dev\GPIO -I ..\Dev\timer -I ..\Dev\usart -I ..\Dev\led -I ..\Dev\ADC -I ..\Dev\CAN -I ..\Dev\PWM -I ..\Charger_Ctrl\h -I ..\SYSTEM-I.\RTE\_RTT_750_Charger_v0.0.1-ID:\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-ID:\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_MD -DSTM32F103xB -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o ..\obj\mcu_adc.o --omf_browse ..\obj\mcu_adc.crf --depend ..\obj\mcu_adc.d)
+I (..\Dev\ADC\MCU_ADC.h)(0x6107B5E3)
 I (D:\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
-I (..\Dev\PWM\PWM.h)(0x6100B73D)
+I (..\Dev\PWM\PWM.h)(0x610780D5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_rcc.h)(0x6100B73E)
 I (..\USER\stm32f10x.h)(0x6100B73E)
 I (..\CORE\core_cm3.h)(0x6100B73D)
@@ -229,7 +229,7 @@ I (..\Dev\GPIO\GPIO.h)(0x6100B73D)
 I (..\Dev\led\LED.h)(0x6100B73D)
 I (..\Charger_Ctrl\h\Chrg_Ctrl.h)(0x6100B73D)
 I (..\SYSTEM\head.h)(0x6100B73E)
-F (..\Dev\ADC\MCU_ADC.h)(0x6103AE41)()
+F (..\Dev\ADC\MCU_ADC.h)(0x6107B5E3)()
 F (..\Dev\usart\usart.c)(0x6100B73D)(--gnu -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\RT-Thread_V3.1.3\components\finsh -I ..\RT-Thread_V3.1.3\include -I ..\RT-Thread_V3.1.3\include\libc -I ..\RT-Thread_V3.1.3\bsp -I ..\Dev -I ..\Dev\GPIO -I ..\Dev\timer -I ..\Dev\usart -I ..\Dev\led -I ..\Dev\ADC -I ..\Dev\CAN -I ..\Dev\PWM -I ..\Charger_Ctrl\h -I ..\SYSTEM-I.\RTE\_RTT_750_Charger_v0.0.1-ID:\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-ID:\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_MD -DSTM32F103xB -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o ..\obj\usart.o --omf_browse ..\obj\usart.crf --depend ..\obj\usart.d)
 I (..\SYSTEM\sys\sys.h)(0x6100B73E)
 I (..\USER\stm32f10x.h)(0x6100B73E)
@@ -310,7 +310,7 @@ I (..\RT-Thread_V3.1.3\include\rtservice.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\include\rtm.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\components\finsh\finsh_api.h)(0x6100B73E)
 I (D:\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\Dev\PWM\PWM.h)(0x6100B73D)
+I (..\Dev\PWM\PWM.h)(0x610780D5)
 I (..\Charger_Ctrl\h\Chrg_Ctrl.h)(0x6100B73D)
 I (..\SYSTEM\delay\delay.h)(0x6100B73E)
 I (..\SYSTEM\sys\sys.h)(0x6100B73E)
@@ -395,7 +395,7 @@ I (..\RT-Thread_V3.1.3\include\rtm.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\components\finsh\finsh_api.h)(0x6100B73E)
 F (..\Dev\led\LED.h)(0x6100B73D)()
 F (..\Dev\PWM\PWM.c)(0x6100B73D)(--gnu -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\RT-Thread_V3.1.3\components\finsh -I ..\RT-Thread_V3.1.3\include -I ..\RT-Thread_V3.1.3\include\libc -I ..\RT-Thread_V3.1.3\bsp -I ..\Dev -I ..\Dev\GPIO -I ..\Dev\timer -I ..\Dev\usart -I ..\Dev\led -I ..\Dev\ADC -I ..\Dev\CAN -I ..\Dev\PWM -I ..\Charger_Ctrl\h -I ..\SYSTEM-I.\RTE\_RTT_750_Charger_v0.0.1-ID:\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-ID:\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_MD -DSTM32F103xB -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o ..\obj\pwm.o --omf_browse ..\obj\pwm.crf --depend ..\obj\pwm.d)
-I (..\Dev\PWM\PWM.h)(0x6100B73D)
+I (..\Dev\PWM\PWM.h)(0x610780D5)
 I (D:\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
 I (..\STM32F10x_FWLib\inc\stm32f10x_rcc.h)(0x6100B73E)
 I (..\USER\stm32f10x.h)(0x6100B73E)
@@ -432,10 +432,10 @@ I (..\RT-Thread_V3.1.3\include\rtdebug.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\include\rtservice.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\include\rtm.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\components\finsh\finsh_api.h)(0x6100B73E)
-I (..\Dev\ADC\MCU_ADC.h)(0x6103AE41)
-F (..\Dev\PWM\PWM.h)(0x6100B73D)()
+I (..\Dev\ADC\MCU_ADC.h)(0x6107B5E3)
+F (..\Dev\PWM\PWM.h)(0x610780D5)()
 F (..\Dev\timer\drv_time.h)(0x6100F875)()
-F (..\Dev\timer\drv_timer.c)(0x6103B1C1)(--gnu -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\RT-Thread_V3.1.3\components\finsh -I ..\RT-Thread_V3.1.3\include -I ..\RT-Thread_V3.1.3\include\libc -I ..\RT-Thread_V3.1.3\bsp -I ..\Dev -I ..\Dev\GPIO -I ..\Dev\timer -I ..\Dev\usart -I ..\Dev\led -I ..\Dev\ADC -I ..\Dev\CAN -I ..\Dev\PWM -I ..\Charger_Ctrl\h -I ..\SYSTEM-I.\RTE\_RTT_750_Charger_v0.0.1-ID:\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-ID:\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_MD -DSTM32F103xB -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o ..\obj\drv_timer.o --omf_browse ..\obj\drv_timer.crf --depend ..\obj\drv_timer.d)
+F (..\Dev\timer\drv_timer.c)(0x6104AA8C)(--gnu -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\RT-Thread_V3.1.3\components\finsh -I ..\RT-Thread_V3.1.3\include -I ..\RT-Thread_V3.1.3\include\libc -I ..\RT-Thread_V3.1.3\bsp -I ..\Dev -I ..\Dev\GPIO -I ..\Dev\timer -I ..\Dev\usart -I ..\Dev\led -I ..\Dev\ADC -I ..\Dev\CAN -I ..\Dev\PWM -I ..\Charger_Ctrl\h -I ..\SYSTEM-I.\RTE\_RTT_750_Charger_v0.0.1-ID:\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include-ID:\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DSTM32F10X_MD -DSTM32F103xB -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o ..\obj\drv_timer.o --omf_browse ..\obj\drv_timer.crf --depend ..\obj\drv_timer.d)
 I (..\Dev\timer\drv_time.h)(0x6100F875)
 I (..\Dev\GPIO\GPIO.h)(0x6100B73D)
 I (D:\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
@@ -469,8 +469,8 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x6100B73E)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x6100B73E)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x6100B73E)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x6100B73E)
-I (..\Dev\PWM\PWM.h)(0x6100B73D)
-I (..\Dev\ADC\MCU_ADC.h)(0x6103AE41)
+I (..\Dev\PWM\PWM.h)(0x610780D5)
+I (..\Dev\ADC\MCU_ADC.h)(0x6107B5E3)
 I (..\RT-Thread_V3.1.3\include\rtthread.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\include\rtdebug.h)(0x6100B73E)
 I (..\RT-Thread_V3.1.3\include\rtservice.h)(0x6100B73E)

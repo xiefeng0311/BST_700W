@@ -40,15 +40,15 @@ CHRG_I_CTRL_str  I_chrg_ctrl_obj = {
 
 CHRG_CTRL_STR  chrg_ctrl_obj = {
     .Target_I_PWM_CTRL = PWM_FM_200K,
-    .Target_I_Value = 0,
+    .Target_I_Value = CHRG_Channle1,
     .Fully_V_Value = BAT_FULL_ADC,
     .I_Channel1 = 0,
     .I_Channel2 = 0,
     .V_BAT1 = 0,
     .V_BAT2 = 0,
-    .FdBack_CTRL_Channel = 0,
-    .CHRG_STT = CC_CHRG,
-    .IPP_Adjust = WAITING,
+    .FdBack_CTRL_Channel = CHRG_Channle1,               //测试使用
+    .CHRG_STT = CC_CHRG,                                //测试使用
+    .IPP_Adjust = WAITING,                           
     .PRE_I_Adjust = UnFinished,
     .CC_I_Adjust = UnFinished,
 };
@@ -74,13 +74,15 @@ static void I_thread_entry(void* parameter) {
     uint32_t sum2 = 0;
     while (1) {
         //求一个周期内电流平均值
-        if (I_chrg_ctrl_obj.I_Period_Flags == Finished) {
+        if (I_chrg_ctrl_obj.I_Period_Flags == Finished) {                        
             for (i = 0; i < I_chrg_ctrl_obj.I_Collect_Times; i++) {
                 sum1 += I_chrg_ctrl_obj.I1_Target_buf[i];
                 sum2 += I_chrg_ctrl_obj.I2_Target_buf[i];
             }
             chrg_ctrl_obj.I_Channel1 = sum1 / I_chrg_ctrl_obj.I_Collect_Times;
-            chrg_ctrl_obj.I_Channel2 = sum1 / I_chrg_ctrl_obj.I_Collect_Times;
+            chrg_ctrl_obj.I_Channel2 = sum2 / I_chrg_ctrl_obj.I_Collect_Times;
+            sum1 = 0;
+            sum2 = 0;
             I_chrg_ctrl_obj.I_Collect_Times = 0;                    //清零计数值
             I_chrg_ctrl_obj.I_Avrg_Flags = Finished;
             I_chrg_ctrl_obj.I_Period_Flags = UnFinished;
@@ -116,66 +118,66 @@ static rt_uint8_t rt_V_thread_stack[256];
 static void V_thread_entry(void * parameter) 
 {
     while(1) {
-        chrg_ctrl_obj.V_BAT1 = AC_Singal_Parameter.BAT1;
-        chrg_ctrl_obj.V_BAT2 = AC_Singal_Parameter.BAT2;
-        if ((chrg_ctrl_obj.V_BAT1 <= BAT_LOADER_ADC) && (chrg_ctrl_obj.V_BAT2 <= BAT_LOADER_ADC)) {
-            chrg_ctrl_obj.FdBack_CTRL_Channel = 0;
-            chrg_ctrl_obj.CHRG_STT = NO_Loader;
-        } else if (chrg_ctrl_obj.V_BAT1 >= chrg_ctrl_obj.V_BAT2) {
-            chrg_ctrl_obj.FdBack_CTRL_Channel = CHRG_Channle2;
-            //BAT2 not on line
-            if (chrg_ctrl_obj.V_BAT2 <= BAT_LOADER_ADC) {
-                chrg_ctrl_obj.FdBack_CTRL_Channel = CHRG_Channle1;
-                if (chrg_ctrl_obj.V_BAT1 < BAT_PRECHR_ADC) {
-                    chrg_ctrl_obj.CHRG_STT = BAT_Low_FAULT;
-                } else if (chrg_ctrl_obj.V_BAT1 < BAT_CC_ADC) {
-                    chrg_ctrl_obj.CHRG_STT = PRE_CHRG;
-                } else if (chrg_ctrl_obj.V_BAT1 < BAT_FULL_ADC) {
-                    chrg_ctrl_obj.CHRG_STT = CC_CHRG;
-                } else if(chrg_ctrl_obj.V_BAT1  < BAT_PRT_ADC) {         //定义过压错误
-                    chrg_ctrl_obj.CHRG_STT = CV_CHRG;
-                } else {
-                    chrg_ctrl_obj.CHRG_STT = BAT_High_FAULT;
-                }
-            } else if (chrg_ctrl_obj.V_BAT2 < BAT_PRECHR_ADC) {
-                chrg_ctrl_obj.CHRG_STT = BAT_Low_FAULT;
-            } else if(chrg_ctrl_obj.V_BAT2 < BAT_CC_ADC) {
-                chrg_ctrl_obj.CHRG_STT = PRE_CHRG;
-            } else if (chrg_ctrl_obj.V_BAT2 < BAT_FULL_ADC) {
-                chrg_ctrl_obj.CHRG_STT = CC_CHRG;
-            } else if (chrg_ctrl_obj.V_BAT2  < BAT_PRT_ADC) {
-                chrg_ctrl_obj.CHRG_STT = CV_CHRG;
-            } else {
-                chrg_ctrl_obj.CHRG_STT = BAT_High_FAULT;
-            }
-        } else{
-            chrg_ctrl_obj.FdBack_CTRL_Channel = CHRG_Channle1;
-            //BAT1 not on line
-            if (chrg_ctrl_obj.V_BAT1 <= BAT_LOADER_ADC) {
-                chrg_ctrl_obj.FdBack_CTRL_Channel = CHRG_Channle2;
-                if (chrg_ctrl_obj.V_BAT2 < BAT_PRECHR_ADC) {
-                    chrg_ctrl_obj.CHRG_STT = BAT_Low_FAULT;
-                } else if (chrg_ctrl_obj.V_BAT2 < BAT_CC_ADC) {
-                    chrg_ctrl_obj.CHRG_STT = PRE_CHRG;
-                } else if (chrg_ctrl_obj.V_BAT2 < BAT_FULL_ADC) {
-                    chrg_ctrl_obj.CHRG_STT = CC_CHRG;
-                } else if(chrg_ctrl_obj.V_BAT2  < BAT_PRT_ADC) {         //定义过压错误
-                    chrg_ctrl_obj.CHRG_STT = CV_CHRG;
-                } else {
-                    chrg_ctrl_obj.CHRG_STT = BAT_High_FAULT;
-                }
-            } else if (chrg_ctrl_obj.V_BAT1 < BAT_PRECHR_ADC) {         //BAT1状态判断
-                chrg_ctrl_obj.CHRG_STT = BAT_Low_FAULT;
-            } else if(chrg_ctrl_obj.V_BAT1 < BAT_CC_ADC) {
-                chrg_ctrl_obj.CHRG_STT = PRE_CHRG;
-            } else if (chrg_ctrl_obj.V_BAT1 < BAT_FULL_ADC) {
-                chrg_ctrl_obj.CHRG_STT = CC_CHRG;
-            } else if (chrg_ctrl_obj.V_BAT1 < BAT_PRT_ADC) {
-                chrg_ctrl_obj.CHRG_STT = CV_CHRG;
-            } else {
-                chrg_ctrl_obj.CHRG_STT = BAT_High_FAULT;
-            }
-        }
+        // chrg_ctrl_obj.V_BAT1 = AC_Singal_Parameter.BAT1;
+        // chrg_ctrl_obj.V_BAT2 = AC_Singal_Parameter.BAT2;
+        // if ((chrg_ctrl_obj.V_BAT1 <= BAT_LOADER_ADC) && (chrg_ctrl_obj.V_BAT2 <= BAT_LOADER_ADC)) {
+        //     chrg_ctrl_obj.FdBack_CTRL_Channel = 0;
+        //     chrg_ctrl_obj.CHRG_STT = NO_Loader;
+        // } else if (chrg_ctrl_obj.V_BAT1 >= chrg_ctrl_obj.V_BAT2) {
+        //     chrg_ctrl_obj.FdBack_CTRL_Channel = CHRG_Channle2;
+        //     //BAT2 not on line
+        //     if (chrg_ctrl_obj.V_BAT2 <= BAT_LOADER_ADC) {
+        //         chrg_ctrl_obj.FdBack_CTRL_Channel = CHRG_Channle1;
+        //         if (chrg_ctrl_obj.V_BAT1 < BAT_PRECHR_ADC) {
+        //             chrg_ctrl_obj.CHRG_STT = BAT_Low_FAULT;
+        //         } else if (chrg_ctrl_obj.V_BAT1 < BAT_CC_ADC) {
+        //             chrg_ctrl_obj.CHRG_STT = PRE_CHRG;
+        //         } else if (chrg_ctrl_obj.V_BAT1 < BAT_FULL_ADC) {
+        //             chrg_ctrl_obj.CHRG_STT = CC_CHRG;
+        //         } else if(chrg_ctrl_obj.V_BAT1  < BAT_PRT_ADC) {         //定义过压错误
+        //             chrg_ctrl_obj.CHRG_STT = CV_CHRG;
+        //         } else {
+        //             chrg_ctrl_obj.CHRG_STT = BAT_High_FAULT;
+        //         }
+        //     } else if (chrg_ctrl_obj.V_BAT2 < BAT_PRECHR_ADC) {
+        //         chrg_ctrl_obj.CHRG_STT = BAT_Low_FAULT;
+        //     } else if(chrg_ctrl_obj.V_BAT2 < BAT_CC_ADC) {
+        //         chrg_ctrl_obj.CHRG_STT = PRE_CHRG;
+        //     } else if (chrg_ctrl_obj.V_BAT2 < BAT_FULL_ADC) {
+        //         chrg_ctrl_obj.CHRG_STT = CC_CHRG;
+        //     } else if (chrg_ctrl_obj.V_BAT2  < BAT_PRT_ADC) {
+        //         chrg_ctrl_obj.CHRG_STT = CV_CHRG;
+        //     } else {
+        //         chrg_ctrl_obj.CHRG_STT = BAT_High_FAULT;
+        //     }
+        // } else{
+        //     chrg_ctrl_obj.FdBack_CTRL_Channel = CHRG_Channle1;
+        //     //BAT1 not on line
+        //     if (chrg_ctrl_obj.V_BAT1 <= BAT_LOADER_ADC) {
+        //         chrg_ctrl_obj.FdBack_CTRL_Channel = CHRG_Channle2;
+        //         if (chrg_ctrl_obj.V_BAT2 < BAT_PRECHR_ADC) {
+        //             chrg_ctrl_obj.CHRG_STT = BAT_Low_FAULT;
+        //         } else if (chrg_ctrl_obj.V_BAT2 < BAT_CC_ADC) {
+        //             chrg_ctrl_obj.CHRG_STT = PRE_CHRG;
+        //         } else if (chrg_ctrl_obj.V_BAT2 < BAT_FULL_ADC) {
+        //             chrg_ctrl_obj.CHRG_STT = CC_CHRG;
+        //         } else if(chrg_ctrl_obj.V_BAT2  < BAT_PRT_ADC) {         //定义过压错误
+        //             chrg_ctrl_obj.CHRG_STT = CV_CHRG;
+        //         } else {
+        //             chrg_ctrl_obj.CHRG_STT = BAT_High_FAULT;
+        //         }
+        //     } else if (chrg_ctrl_obj.V_BAT1 < BAT_PRECHR_ADC) {         //BAT1状态判断
+        //         chrg_ctrl_obj.CHRG_STT = BAT_Low_FAULT;
+        //     } else if(chrg_ctrl_obj.V_BAT1 < BAT_CC_ADC) {
+        //         chrg_ctrl_obj.CHRG_STT = PRE_CHRG;
+        //     } else if (chrg_ctrl_obj.V_BAT1 < BAT_FULL_ADC) {
+        //         chrg_ctrl_obj.CHRG_STT = CC_CHRG;
+        //     } else if (chrg_ctrl_obj.V_BAT1 < BAT_PRT_ADC) {
+        //         chrg_ctrl_obj.CHRG_STT = CV_CHRG;
+        //     } else {
+        //         chrg_ctrl_obj.CHRG_STT = BAT_High_FAULT;
+        //     }
+        // }
         rt_thread_mdelay(10);
     }
 }
@@ -204,6 +206,7 @@ static void chargering_start(void)
         set_f(chrg_ctrl_obj.Target_I_PWM_CTRL);         
     } else {
         chargering_step = CHRGING;
+        chrg_ctrl_obj.CHRG_STT = CC_CHRG;               //测试使用
     }
 }
 
@@ -236,7 +239,7 @@ static void Pre_Chargering(void)
         if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle1) {
             if (chrg_ctrl_obj.PRE_I_Adjust == UnFinished) {
                 if (chrg_ctrl_obj.I_Channel1 < chrg_ctrl_obj.Target_I_Value) {
-                    chrg_ctrl_obj.Target_I_PWM_CTRL--;
+                    chrg_ctrl_obj.Target_I_PWM_CTRL++;
                     set_f(chrg_ctrl_obj.Target_I_PWM_CTRL); 
                     chrg_ctrl_obj.IPP_Adjust = WAITING;              //暂停纹波调节
                     
@@ -249,7 +252,7 @@ static void Pre_Chargering(void)
         } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
             if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
                 if (chrg_ctrl_obj.I_Channel2 < chrg_ctrl_obj.Target_I_Value) {
-                    chrg_ctrl_obj.Target_I_PWM_CTRL--;
+                    chrg_ctrl_obj.Target_I_PWM_CTRL++;
                     set_f(chrg_ctrl_obj.Target_I_PWM_CTRL); 
                     chrg_ctrl_obj.IPP_Adjust = WAITING;
                 } else {
@@ -259,19 +262,21 @@ static void Pre_Chargering(void)
                 }
             }
         }
-        I_chrg_ctrl_obj.I_Avrg_Flags = UnFinished;
+        //I_chrg_ctrl_obj.I_Avrg_Flags = UnFinished;            //test 20210802
     }
     
 }
 
 static void CC_Chargering(void) 
 {
-    chrg_ctrl_obj.Target_I_Value = CC_I;
+    chrg_ctrl_obj.Target_I_Value = I_1A;
     if (I_chrg_ctrl_obj.I_Avrg_Flags == Finished) {
         if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle1) {
             if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
                 if (chrg_ctrl_obj.I_Channel1 < chrg_ctrl_obj.Target_I_Value) {
-                    chrg_ctrl_obj.Target_I_PWM_CTRL--;
+                    if (chrg_ctrl_obj.Target_I_PWM_CTRL < PWM_FM_80K) {
+                        chrg_ctrl_obj.Target_I_PWM_CTRL++;
+                    }
                     set_f(chrg_ctrl_obj.Target_I_PWM_CTRL); 
                     chrg_ctrl_obj.IPP_Adjust = WAITING;
                 } else {
@@ -279,10 +284,14 @@ static void CC_Chargering(void)
                     chrg_ctrl_obj.CC_I_Adjust = Finished;
                 }
             }
+ 
+            //rt_kprintf("chrg_ctrl_obj.I_Channel1  = %d \n", chrg_ctrl_obj.I_Channel1);
         } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
             if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
                 if (chrg_ctrl_obj.I_Channel2 < chrg_ctrl_obj.Target_I_Value) {
-                    chrg_ctrl_obj.Target_I_PWM_CTRL--;
+                    if (chrg_ctrl_obj.Target_I_PWM_CTRL < PWM_FM_80K) {
+                        chrg_ctrl_obj.Target_I_PWM_CTRL++;
+                    }
                     set_f(chrg_ctrl_obj.Target_I_PWM_CTRL); 
                     chrg_ctrl_obj.IPP_Adjust = WAITING;
                 } else {
@@ -291,22 +300,24 @@ static void CC_Chargering(void)
                 }
             }
         }
-        I_chrg_ctrl_obj.I_Avrg_Flags = UnFinished;
+        //I_chrg_ctrl_obj.I_Avrg_Flags = UnFinished;                //test 20210807
+        rt_kprintf("chrg_ctrl_obj.Target_I_PWM_CTRL   = %d \n", chrg_ctrl_obj.Target_I_PWM_CTRL);
     }
+    
 }
 
 static void CV_Chargering(void) 
 {
     if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle1) {
         if (chrg_ctrl_obj.V_BAT1 <= chrg_ctrl_obj.Fully_V_Value) {
-            chrg_ctrl_obj.Target_I_PWM_CTRL--;
+            chrg_ctrl_obj.Target_I_PWM_CTRL++;
             
         } else if (chrg_ctrl_obj.I_Channel1 < END_I) {
             chrg_ctrl_obj.CHRG_STT = CHRG_Finished;
         }
     } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
         if (chrg_ctrl_obj.V_BAT2 <= chrg_ctrl_obj.Fully_V_Value) {
-            chrg_ctrl_obj.Target_I_PWM_CTRL--;
+            chrg_ctrl_obj.Target_I_PWM_CTRL++;
         } else if (chrg_ctrl_obj.I_Channel2 < END_I) {
             chrg_ctrl_obj.CHRG_STT = CHRG_Finished;
         }
@@ -322,9 +333,15 @@ static void Chargering_Finished(void)
 
 static void Chargering_ctrl()
 {
-    
+    //static uint16_t times_delay = 0;            //测试使用
     if (chargering_step == START_CHRGING) {
         chargering_start();
+        // times_delay++;
+        // if (times_delay >= 500) {               //测试使用
+        //     chargering_step = CHRGING;
+        //     chrg_ctrl_obj.CHRG_STT = CC_CHRG;
+        //     times_delay = 0;
+        // }
     } else if (chargering_step == CHRGING) {
         if (chrg_ctrl_obj.CHRG_STT == PRE_CHRG) {
             Pre_Chargering();
@@ -346,7 +363,10 @@ static void CHRG_CTRL_thread_entry(void * parameter)
         // } else  {
         //     Chargering_ctrl();
         // } 
+        // rt_kprintf("chrg_ctrl_obj.CHRG_STT = %d \n", chrg_ctrl_obj.CHRG_STT);
+        // rt_kprintf("chargering_step = %d \n", chargering_step);
         rt_thread_mdelay(10);
+
     }
 }
 

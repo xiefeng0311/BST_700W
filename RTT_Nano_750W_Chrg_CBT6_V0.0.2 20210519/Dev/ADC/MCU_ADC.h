@@ -97,8 +97,7 @@
  * @brief  Stop LLC V
  * @param PFCVin < 0.83V stop LLC,
  */
-//#define PFC_STOPV                   1030
-#define PFC_STOPV                   620     			//测试使用
+#define PFC_STOPV                   1030
 
 /**
  * @brief  Limit LLC P
@@ -144,6 +143,13 @@
  * @param current gain is 40,R=0.01,Current=2A
  */
 #define I_2A                       992
+
+/**
+ * @brief define cc current
+ * @param current gain is 40,R=0.01,Current=2A
+ */
+#define I_1A                       496
+
 /**
  * @brief 实际测试电流纹波是>800mA, 800多mA是波峰和波谷之间值，ADC是0.1ms采集一次，PFC
  * @param current gain is 40,R=0.01,Current=0.016A

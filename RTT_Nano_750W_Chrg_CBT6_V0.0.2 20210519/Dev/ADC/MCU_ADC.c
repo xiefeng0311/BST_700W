@@ -350,41 +350,6 @@ void  ascending_order(uint16_t *p_array, uint16_t data_num)
     }
 }
 
-/**
- * @brief array_average: 采用平滑队列滤波方案
- * @param p_array 数据缓冲数组
- * @param chanel_num 数组元素号
- * @param data_num 数组数据个数
- * @return uint16_t 返回平均值结果
- */
-uint16_t array_average(uint16_t *p_array, uint8_t chanel_num, uint16_t data_length) 
-{
-    static uint32_t data_sum = 0;
-    static uint16_t i = 0;
-    static uint16_t result = 0;
-    uint16_t m = 0;
-    
-    if (data_length > sizeof(AveragedBuf)) {
-        return SYS_ERR;
-    } else {
-        if (i < (data_length - 1)) {
-            AveragedBuf[i] = p_array[chanel_num];
-            i++;
-        } else {
-            AveragedBuf[++i] = p_array[chanel_num];
-            for (m = 0; m < data_length; m++) {
-                data_sum += AveragedBuf[m];
-            }
-            result =  (uint16_t)(data_sum / data_length);
-            for (; i > 1; i--) {
-                AveragedBuf[i-1] = AveragedBuf[i];
-            }
-            i = data_length - 1;
-            data_sum = 0;
-        }
-    }
-    return result;
-}
 
 /**
  * @brief 数据转移
@@ -446,7 +411,7 @@ void ADC_filter(uint16_t p_array[NbrOfBuf][NbrOfChannel], uint16_t p_s_array[Nbr
             ADC_Finished_Flag = ADC_FINISHED;
         }
     } else {
-        //采用队列方式进行滤波
+        //采用队列方式进行滤波,滤波缓冲满后从头开始
         if (filter_times < NbrOfBuf) {
             for (i = 0; i < NbrOfChannel; i++) {
                 p_array[filter_times][i] = p_s_array[i];
@@ -652,13 +617,13 @@ void current_pp_adjust(uint16_t target_I)
     //uint16_t pwm_data = 0;
     Wave_I = target_I / 10;
     if (pp_adjust_step == step0) {
-        // data_times++;
-        // if (period_signl_recd >= 2) {
-        //     data_num = data_times / Data_Border;                         //均分观测点    
-        //     pp_adjust_step = step1;
-        //     data_times = 0;
-        //     period_signl_recd = 0;                              //重新开始
-        // }
+        data_times++;
+        if (period_signl_recd >= 2) {
+            data_num = data_times / Data_Border;                         //均分观测点    
+            pp_adjust_step = step1;
+            data_times = 0;
+            period_signl_recd = 0;                              //重新开始
+        }
     } else if (pp_adjust_step == step1) {
         rt_kprintf("data_num = %d\n\n", data_num);
         // if (period_signl_recd < 2) {
@@ -769,6 +734,7 @@ void DMA1_Channel1_IRQHandler(void)
     static uint16_t start_rcd_times = 0;
     
     if (DMA_GetITStatus(DMA1_IT_TC1)) {
+        ADC_filter(ADCConvertedBuf, ADCConvertedValue);
         if (pwm_step == 0) {
             delay = 0;
             start_rcd_times = 0;
@@ -792,33 +758,36 @@ void DMA1_Channel1_IRQHandler(void)
                 }
             }
         }else if (pwm_step == 2) {
-            CHRG_ADC_Value.PFC_Vin = array_average(ADCConvertedValue, PFCVin_CHNL7, NbrOfBuf);
+           
             if (delay >= 32000) {
-                if (CHRG_ADC_Value.PFC_Vin < PFC_STOPV) {
-                    power_on_disenabled();
-                    PWM_stop(I1_2_PWM_src);
-                    pwm_step = 0;
-                    
-                } else if (CHRG_ADC_Value.PFC_Vin <= PFC_STV) {
-                    PWM_start(I1_2_PWM_src);
-                    pwm_step = 3;
-                } else {
-                    //降额
-                    PWM_start(I1_2_PWM_src);
-                    pwm_step = 3;
+                if (ADC_Finished_Flag == ADC_FINISHED) {
+                    rt_kprintf("AC_Singal_Parameter.PFC_Vin = %d \n", AC_Singal_Parameter.PFC_Vin);
+                    if (AC_Singal_Parameter.PFC_Vin < PFC_STOPV) {
+                        power_on_disenabled();
+                        PWM_stop(I1_2_PWM_src);
+                        pwm_step = 0;
+                        
+                    } else if (AC_Singal_Parameter.PFC_Vin <= PFC_STV) {
+                        PWM_start(I1_2_PWM_src);
+                        pwm_step = 3;
+                    } else {
+                        //降额
+                        PWM_start(I1_2_PWM_src);
+                        pwm_step = 3;
+                    }
                 }
                 delay = 0;
             }
         } else if (pwm_step == 3) {
-			CHRG_ADC_Value.PFC_Vin = array_average(ADCConvertedValue, PFCVin_CHNL7, NbrOfBuf);
-            adc_data_carry(AC_Singal_Parameter.ADC_data_array, ADCConvertedValue);
-            ADC_filter(ADCConvertedBuf, ADCConvertedValue);
+            //adc_data_carry(AC_Singal_Parameter.ADC_data_array, ADCConvertedValue);
+            rt_kprintf("CHRG1I = %d \n", ADCConvertedValue[CHRG1I_CHNL4]);
             if (chrg_ctrl_obj.CHRG_STT == PRE_CHRG) {
                 if  (chrg_ctrl_obj.PRE_I_Adjust == UnFinished) {            //调整中心电流值
                     if (period_signl_recd >= 1) {                           //同步信号首次出现
                         if (I_chrg_ctrl_obj.I_Period_Flags == UnFinished) {
-                            I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = AC_Singal_Parameter.I1;
-                            I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = AC_Singal_Parameter.I2;
+                            /* 电流采集不采用队列滤波方式 */
+                            I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
+                            I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
                             I_chrg_ctrl_obj.I_Collect_Times++;
                         }
                         if (period_signl_recd >= 2) {
@@ -833,29 +802,33 @@ void DMA1_Channel1_IRQHandler(void)
                 }
                 
             } else if (chrg_ctrl_obj.CHRG_STT == CC_CHRG) {
+                
                 if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
                     if (period_signl_recd >= 1) {
                         if (I_chrg_ctrl_obj.I_Period_Flags == UnFinished) {
-                            I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = AC_Singal_Parameter.I1;
-                            I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = AC_Singal_Parameter.I2;
-                            I_chrg_ctrl_obj.I_Collect_Times++;
+                             /* 电流采集不采用队列滤波方式 */
+                            I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
+                            I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
+                            I_chrg_ctrl_obj.I_Collect_Times++; 
                         }
                         if (period_signl_recd >= 2) {
                             I_chrg_ctrl_obj.I_Period_Flags = Finished;          //电流一个周期数据采集完成
                             period_signl_recd = 0;
                         }
                     }
+                    
                 } else if (chrg_ctrl_obj.CC_I_Adjust == Finished) {
                     if (period_signl_recd >= 1) {                           //同步信号出现开始调整纹波电流
-                        current_pp_adjust(CC_I);
+                        current_pp_adjust(I_1A);
                     }
                 }
+                rt_kprintf("chrg_ctrl_obj.CC_I_Adjust = %d \n", chrg_ctrl_obj.CC_I_Adjust);
             }
-            if (CHRG_ADC_Value.PFC_Vin < PFC_STOPV) {
+            if (AC_Singal_Parameter.PFC_Vin < PFC_STOPV) {
                     power_on_disenabled();
                     PWM_stop(I1_2_PWM_src);
                     pwm_step = 0;
-                } else if (CHRG_ADC_Value.PFC_Vin > PFC_LPV) {
+                } else if (AC_Singal_Parameter.PFC_Vin > PFC_LPV) {
                     //限功率
                 } 
         }

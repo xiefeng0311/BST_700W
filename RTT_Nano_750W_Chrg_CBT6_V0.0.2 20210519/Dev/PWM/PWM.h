@@ -39,8 +39,10 @@
  * @brief 定义各个频率点的分频系数
  * @param 分频系数 = 72000000 / f 
  */
-#define  PWM_FM_200K 360
-#define  PWM_FM_120K 600
+#define  PWM_FM_200K    360
+#define  PWM_FM_120K    600
+#define  PWM_FM_100K    720
+#define  PWM_FM_80K     900
 typedef enum {
     FM_200KHZ,
 	FM_199KHZ,
