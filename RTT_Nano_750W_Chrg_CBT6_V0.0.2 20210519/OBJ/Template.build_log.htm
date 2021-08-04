@@ -27,116 +27,7 @@ Project File Date:  07/28/2021
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\ARM\ARMCC\Bin'
 Build target 'RTT_750_Charger_v0.0.1'
-compiling Chrg_Ctrl.c...
-..\Charger_Ctrl\c\Chrg_Ctrl.c(70): warning:  #177-D: variable "I1_Value"  was declared but never referenced
-      uint16_t I1_Value = 0;
-..\Charger_Ctrl\c\Chrg_Ctrl.c(71): warning:  #177-D: variable "I2_Value"  was declared but never referenced
-      uint16_t I2_Value = 0;
-..\Charger_Ctrl\c\Chrg_Ctrl.c(105): warning:  #144-D: a value of type "void (*)(void)" cannot be used to initialize an entity of type "const init_fn_t"
-  INIT_APP_EXPORT(I_thread_init);                                 //初始化电流线�?
-..\Charger_Ctrl\c\Chrg_Ctrl.c(197): warning:  #144-D: a value of type "void (*)(void)" cannot be used to initialize an entity of type "const init_fn_t"
-  INIT_APP_EXPORT(V_thread_init);                                 //初始化电压线�?
-..\Charger_Ctrl\c\Chrg_Ctrl.c(395): warning:  #1-D: last line of file ends without a newline
-  INIT_APP_EXPORT(CHRG_CTRL_thread_init);                                 //初始化电压线�?
-..\Charger_Ctrl\c\Chrg_Ctrl.c(395): warning:  #144-D: a value of type "void (*)(void)" cannot be used to initialize an entity of type "const init_fn_t"
-  INIT_APP_EXPORT(CHRG_CTRL_thread_init);                                 //初始化电压线�?
-..\Charger_Ctrl\c\Chrg_Ctrl.c(21): warning:  #177-D: variable "Chrg_Status"  was declared but never referenced
-  static Chrg_ST_em Chrg_Status = NO_Loader;
-..\Charger_Ctrl\c\Chrg_Ctrl.c(30): warning:  #177-D: variable "PFC_Status"  was declared but never referenced
-  static AC_st_em PFC_Status = AC_Normal;
-..\Charger_Ctrl\c\Chrg_Ctrl.c(213): warning:  #177-D: function "chrg_stop"  was declared but never referenced
-  static void chrg_stop(void)
-..\Charger_Ctrl\c\Chrg_Ctrl.c(230): warning:  #177-D: function "BAT_Fault"  was declared but never referenced
-  static void BAT_Fault(void)
-..\Charger_Ctrl\c\Chrg_Ctrl.c(309): warning:  #177-D: function "CV_Chargering"  was declared but never referenced
-  static void CV_Chargering(void) 
-..\Charger_Ctrl\c\Chrg_Ctrl.c(327): warning:  #177-D: function "Chargering_Finished"  was declared but never referenced
-  static void Chargering_Finished(void) 
-..\Charger_Ctrl\c\Chrg_Ctrl.c: 12 warnings, 0 errors
-compiling MCU_ADC.c...
-..\Dev\led\LED.h(21): warning:  #47-D: incompatible redefinition of macro "LED3_ON"  (declared at line 33 of "..\Dev\GPIO\GPIO.h")
-  #define  LED3_ON					            GPIO_SetBits(LED3_Port, LED3_PIN)	
-..\Dev\led\LED.h(22): warning:  #47-D: incompatible redefinition of macro "LED3_OFF"  (declared at line 34 of "..\Dev\GPIO\GPIO.h")
-  #define  LED3_OFF					            GPIO_ResetBits(LED3_Port, LED3_PIN)
-..\Dev\ADC\MCU_ADC.c(126): warning:  #940-D: missing return statement at end of non-void function "get_frq" 
-  }
-..\Dev\ADC\MCU_ADC.c(377): warning:  #177-D: variable "m"  was declared but never referenced
-      uint16_t m = 0;
-..\Dev\ADC\MCU_ADC.c(398): warning:  #177-D: variable "full_flag"  was declared but never referenced
-      static uint8_t full_flag = 0;
-..\Dev\ADC\MCU_ADC.c(536): warning:  #177-D: variable "i"  was declared but never referenced
-      static uint16_t i = CHRG1I_CHNL4;
-..\Dev\ADC\MCU_ADC.c(583): warning:  #550-D: variable "data_breadth"  was set but never used
-      uint16_t data_breadth = 0;
-..\Dev\ADC\MCU_ADC.c(612): warning:  #177-D: variable "data_times"  was declared but never referenced
-      static uint16_t data_times = 0;
-..\Dev\ADC\MCU_ADC.c(614): warning:  #177-D: variable "i"  was declared but never referenced
-      static uint16_t i = 0;
-..\Dev\ADC\MCU_ADC.c(615): warning:  #550-D: variable "Wave_I"  was set but never used
-      uint16_t Wave_I = 0;
-..\Dev\ADC\MCU_ADC.c(616): warning:  #177-D: variable "n"  was declared but never referenced
-      uint16_t n = 0;
-..\Dev\ADC\MCU_ADC.c(59): warning:  #177-D: variable "I_min"  was declared but never referenced
-  static uint16_t I_min = 0;
-..\Dev\ADC\MCU_ADC.c(60): warning:  #177-D: variable "I_max"  was declared but never referenced
-  static uint16_t I_max = 0;
-..\Dev\ADC\MCU_ADC.c(61): warning:  #177-D: variable "I_min_record"  was declared but never referenced
-  static uint16_t I_min_record = 0;
-..\Dev\ADC\MCU_ADC.c(62): warning:  #177-D: variable "I_max_record"  was declared but never referenced
-  static uint16_t I_max_record = 0;
-..\Dev\ADC\MCU_ADC.c(63): warning:  #177-D: variable "record_mark"  was declared but never referenced
-  static uint16_t record_mark = 0;
-..\Dev\ADC\MCU_ADC.c(65): warning:  #177-D: variable "avrg_bf_numb"  was declared but never referenced
-  static uint16_t avrg_bf_numb = 0;                           //滤波缓冲区数
-..\Dev\ADC\MCU_ADC.c(66): warning:  #177-D: variable "finish_flag"  was declared but never referenced
-  static uint16_t finish_flag = 0;
-..\Dev\ADC\MCU_ADC.c(69): warning:  #177-D: variable "PFC_IN_V"  was declared but never referenced
-  static uint16_t PFC_IN_V[5] = {0, 1030, 1320, 1365, 4096};
-..\Dev\ADC\MCU_ADC.c(75): warning:  #177-D: variable "data_louth"  was declared but never referenced
-  static uint16_t data_louth = 0;
-..\Dev\ADC\MCU_ADC.c(79): warning:  #177-D: variable "ref_vbat"  was declared but never referenced
-  static uint16_t ref_vbat;
-..\Dev\ADC\MCU_ADC.c(92): warning:  #177-D: variable "AveragedBuf"  was declared but never referenced
-  static uint16_t AveragedBuf[NbrOfBuf] = {0};                                       //用于求平均buffer
-..\Dev\ADC\MCU_ADC.c(101): warning:  #177-D: variable "CHRG_ADC_Value"  was declared but never referenced
-  static CHRG_ADC_DATA CHRG_ADC_Value;
-..\Dev\ADC\MCU_ADC.c(103): warning:  #177-D: variable "CHRG_channel"  was declared but never referenced
-  static CHRG_CHL CHRG_channel;
-..\Dev\ADC\MCU_ADC.c(322): warning:  #177-D: function "array_swap"  was declared but never referenced
-  static void array_swap(uint16_t (*p_original)[NbrOfChannel], uint16_t (*p_target)[NbrOfBuf])
-..\Dev\ADC\MCU_ADC.c(606): warning:  #177-D: variable "IPP_STT_RCRD"  was declared but never referenced
-  static uint8_t IPP_STT_RCRD[25] = {0};                              //纹波电流状态记�?
-..\Dev\ADC\MCU_ADC.c(607): warning:  #177-D: variable "IPP_Adjusted_Record"  was declared but never referenced
-  static uint8_t IPP_Adjusted_Record[25] = {0};                       //用于标记是否已调节过
-..\Dev\ADC\MCU_ADC.c(608): warning:  #177-D: variable "IPP_Adjust_Data_Record"  was declared but never referenced
-  static uint16_t IPP_Adjust_Data_Record[25] = {0};                   //各点纹波调整值记�?
-..\Dev\ADC\MCU_ADC.c(609): warning:  #177-D: variable "IPP_Adjust_Data"  was declared but never referenced
-  static uint16_t IPP_Adjust_Data[25] = {0};
-..\Dev\ADC\MCU_ADC.c: 29 warnings, 0 errors
-compiling PWM.c...
-..\Dev\PWM\PWM.c(399): warning:  #144-D: a value of type "void (*)(void)" cannot be used to initialize an entity of type "const init_fn_t"
-  INIT_DEVICE_EXPORT(PWM_PERPH_Init);
-..\Dev\PWM\PWM.c(500): warning:  #144-D: a value of type "void (*)(void)" cannot be used to initialize an entity of type "const init_fn_t"
-  INIT_APP_EXPORT(pwm_thread_init);
-..\Dev\PWM\PWM.c(704): warning:  #940-D: missing return statement at end of non-void function "FM_Jump" 
-  }
-..\Dev\PWM\PWM.c(715): warning:  #940-D: missing return statement at end of non-void function "FM_select_num" 
-  }
-..\Dev\PWM\PWM.c(745): warning:  #177-D: variable "TIM1_BDTRInitStruct"  was declared but never referenced
-      TIM_BDTRInitTypeDef      TIM1_BDTRInitStruct;
-..\Dev\PWM\PWM.c(60): warning:  #177-D: function "PWM_VI1_Init"  was declared but never referenced
-  static void PWM_VI1_Init(void);
-..\Dev\PWM\PWM.c(61): warning:  #177-D: function "PWM_VI2_Init"  was declared but never referenced
-  static void PWM_VI2_Init(void);
-..\Dev\PWM\PWM.c: 7 warnings, 0 errors
-compiling drv_timer.c...
-..\Dev\timer\drv_timer.c(56): warning:  #144-D: a value of type "void (*)(void)" cannot be used to initialize an entity of type "const init_fn_t"
-  INIT_DEVICE_EXPORT(Time3_Init_interfaces);
-..\Dev\timer\drv_timer.c: 1 warning, 0 errors
-linking...
-Program Size: Code=24252 RO-data=1280 RW-data=788 ZI-data=10180  
-FromELF: creating hex file...
-"..\OBJ\Template.axf" - 0 Error(s), 49 Warning(s).
+"..\OBJ\Template.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -150,7 +41,7 @@ Package Vendor: Keil
   D:\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:10
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

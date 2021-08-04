@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\Template.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\Template.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Aug 02 17:08:40 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Aug 04 10:51:17 2021
 <BR><P>
 <H3>Maximum Stack Usage =        452 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -639,7 +639,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> chrg_ctrl.o(.rti_fn.6)
 </UL>
 <P><STRONG><a name="[1a]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 542 bytes, Stack size 8 bytes, mcu_adc.o(i.DMA1_Channel1_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 204<LI>Call Chain = DMA1_Channel1_IRQHandler &rArr; current_pp_adjust &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
+<BR><BR>[Stack]<UL><LI>Max Depth = 188<LI>Call Chain = DMA1_Channel1_IRQHandler &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;power_on_enabled
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
@@ -1160,10 +1160,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> msh.o(FSymTab)
 </UL>
-<P><STRONG><a name="[b1]"></a>current_pp_adjust</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, mcu_adc.o(i.current_pp_adjust))
-<BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = current_pp_adjust &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
-</UL>
-<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
+<P><STRONG><a name="[b1]"></a>current_pp_adjust</STRONG> (Thumb, 82 bytes, Stack size 8 bytes, mcu_adc.o(i.current_pp_adjust))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = current_pp_adjust
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Channel1_IRQHandler
 </UL>
@@ -1621,8 +1619,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_console_output
 <LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_vsnprintf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_pp_adjust
-<LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Channel1_IRQHandler
+<BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Channel1_IRQHandler
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADCInit
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CC_Chargering
 <LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_system_heap_init

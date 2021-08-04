@@ -284,7 +284,7 @@ static void CC_Chargering(void)
                     chrg_ctrl_obj.CC_I_Adjust = Finished;
                 }
             }
- 
+            
             //rt_kprintf("chrg_ctrl_obj.I_Channel1  = %d \n", chrg_ctrl_obj.I_Channel1);
         } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
             if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
@@ -303,7 +303,7 @@ static void CC_Chargering(void)
         //I_chrg_ctrl_obj.I_Avrg_Flags = UnFinished;                //test 20210807
         rt_kprintf("chrg_ctrl_obj.Target_I_PWM_CTRL   = %d \n", chrg_ctrl_obj.Target_I_PWM_CTRL);
     }
-    
+    //rt_kprintf("ccmodle \n");
 }
 
 static void CV_Chargering(void) 

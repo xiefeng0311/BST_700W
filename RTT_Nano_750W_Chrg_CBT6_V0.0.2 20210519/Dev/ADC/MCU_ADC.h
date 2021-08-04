@@ -146,7 +146,7 @@
 
 /**
  * @brief define cc current
- * @param current gain is 40,R=0.01,Current=2A
+ * @param current gain is 40,R=0.01,Current=1A
  */
 #define I_1A                       496
 
