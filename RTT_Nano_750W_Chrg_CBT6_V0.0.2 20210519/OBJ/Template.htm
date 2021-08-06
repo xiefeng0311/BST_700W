@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\Template.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\Template.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Aug 04 10:51:17 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Aug 06 10:53:55 2021
 <BR><P>
 <H3>Maximum Stack Usage =        452 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -638,7 +638,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> chrg_ctrl.o(.rti_fn.6)
 </UL>
-<P><STRONG><a name="[1a]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 542 bytes, Stack size 8 bytes, mcu_adc.o(i.DMA1_Channel1_IRQHandler))
+<P><STRONG><a name="[1a]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 522 bytes, Stack size 8 bytes, mcu_adc.o(i.DMA1_Channel1_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 188<LI>Call Chain = DMA1_Channel1_IRQHandler &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;power_on_enabled
@@ -1621,6 +1621,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Channel1_IRQHandler
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADCInit
+<LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I_thread_entry
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CC_Chargering
 <LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_system_heap_init
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Control_Init
@@ -2314,10 +2315,11 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CHRG_CTRL_thread_entry
 </UL>
 
-<P><STRONG><a name="[50]"></a>I_thread_entry</STRONG> (Thumb, 102 bytes, Stack size 0 bytes, chrg_ctrl.o(i.I_thread_entry))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = I_thread_entry &rArr; rt_thread_mdelay &rArr; rt_thread_sleep &rArr; rt_timer_start &rArr; _rt_timer_remove
+<P><STRONG><a name="[50]"></a>I_thread_entry</STRONG> (Thumb, 112 bytes, Stack size 0 bytes, chrg_ctrl.o(i.I_thread_entry))
+<BR><BR>[Stack]<UL><LI>Max Depth = 180<LI>Call Chain = I_thread_entry &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> chrg_ctrl.o(i.I_thread_init)
 </UL>

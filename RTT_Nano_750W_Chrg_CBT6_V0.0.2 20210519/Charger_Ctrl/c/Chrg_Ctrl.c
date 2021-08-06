@@ -79,10 +79,12 @@ static void I_thread_entry(void* parameter) {
                 sum1 += I_chrg_ctrl_obj.I1_Target_buf[i];
                 sum2 += I_chrg_ctrl_obj.I2_Target_buf[i];
             }
+            rt_kprintf("I_chrg_ctrl_obj.I_Collect_Times = %d \n", I_chrg_ctrl_obj.I_Collect_Times);
             chrg_ctrl_obj.I_Channel1 = sum1 / I_chrg_ctrl_obj.I_Collect_Times;
             chrg_ctrl_obj.I_Channel2 = sum2 / I_chrg_ctrl_obj.I_Collect_Times;
             sum1 = 0;
             sum2 = 0;
+			
             I_chrg_ctrl_obj.I_Collect_Times = 0;                    //清零计数值
             I_chrg_ctrl_obj.I_Avrg_Flags = Finished;
             I_chrg_ctrl_obj.I_Period_Flags = UnFinished;
@@ -274,7 +276,7 @@ static void CC_Chargering(void)
         if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle1) {
             if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
                 if (chrg_ctrl_obj.I_Channel1 < chrg_ctrl_obj.Target_I_Value) {
-                    if (chrg_ctrl_obj.Target_I_PWM_CTRL < PWM_FM_80K) {
+                    if (chrg_ctrl_obj.Target_I_PWM_CTRL < PWM_FM_100K) {
                         chrg_ctrl_obj.Target_I_PWM_CTRL++;
                     }
                     set_f(chrg_ctrl_obj.Target_I_PWM_CTRL); 
@@ -289,7 +291,7 @@ static void CC_Chargering(void)
         } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
             if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
                 if (chrg_ctrl_obj.I_Channel2 < chrg_ctrl_obj.Target_I_Value) {
-                    if (chrg_ctrl_obj.Target_I_PWM_CTRL < PWM_FM_80K) {
+                    if (chrg_ctrl_obj.Target_I_PWM_CTRL < PWM_FM_100K) {
                         chrg_ctrl_obj.Target_I_PWM_CTRL++;
                     }
                     set_f(chrg_ctrl_obj.Target_I_PWM_CTRL); 

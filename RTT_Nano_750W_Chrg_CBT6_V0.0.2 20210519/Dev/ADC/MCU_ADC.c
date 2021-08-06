@@ -735,22 +735,18 @@ void DMA1_Channel1_IRQHandler(void)
     
     if (DMA_GetITStatus(DMA1_IT_TC1)) {
         ADC_filter(ADCConvertedBuf, ADCConvertedValue);
+        if (start_rcd_times == 1) {
+            delay++;
+        }
         if (pwm_step == 0) {
             delay = 0;
             start_rcd_times = 0;
             I_chrg_ctrl_obj.I_Collect_Times = 0;
             if (ACSingal_In() == 0) {                       //同步信号是否正常，正常为0V
                 pwm_step = 1;
-                start_rcd_times = 1;
-            } else {
-                start_rcd_times = 0;
-            }
-        }
-        if (start_rcd_times == 1) {
-            delay++;
-        }
-
-        if (pwm_step == 1) {
+                start_rcd_times = 1;                    
+            } 
+        }else if (pwm_step == 1) {
             if (delay >= 20000) {
                 if (ACSingal_In() == 0) {
                     power_on_enabled();                     //使能PFC
@@ -758,7 +754,6 @@ void DMA1_Channel1_IRQHandler(void)
                 }
             }
         }else if (pwm_step == 2) {
-           
             if (delay >= 32000) {
                 if (ADC_Finished_Flag == ADC_FINISHED) {            //滤波转换完成
                     rt_kprintf("AC_Singal_Parameter.PFC_Vin = %d \n", AC_Singal_Parameter.PFC_Vin);
@@ -776,7 +771,7 @@ void DMA1_Channel1_IRQHandler(void)
                         pwm_step = 3;
                     }
                 }
-                start_rcd_times = 0;
+                start_rcd_times = 0;                                //关闭延时
                 delay = 0;
             }
         } else if (pwm_step == 3) {
@@ -787,12 +782,9 @@ void DMA1_Channel1_IRQHandler(void)
                     if (period_signl_recd >= 1) {                           //同步信号首次出现
                         if (I_chrg_ctrl_obj.I_Period_Flags == UnFinished) {
                             /* 电流采集不采用队列滤波方式 */
-                            if (I_chrg_ctrl_obj.I_Collect_Times < 150) {
-                                I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
-                                I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
-                                I_chrg_ctrl_obj.I_Collect_Times++;
-                            }
-                            
+							I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
+                            I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
+                            I_chrg_ctrl_obj.I_Collect_Times++;
                         }
                         if (period_signl_recd >= 2) {
                             I_chrg_ctrl_obj.I_Period_Flags = Finished;          //一个周期数据采集完成
@@ -811,16 +803,16 @@ void DMA1_Channel1_IRQHandler(void)
                     if (period_signl_recd >= 1) {
                         if (I_chrg_ctrl_obj.I_Period_Flags == UnFinished) {
                              /* 电流采集不采用队列滤波方式 */
-                            if (I_chrg_ctrl_obj.I_Collect_Times < 150) {
-                                I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
-                                I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
-                                I_chrg_ctrl_obj.I_Collect_Times++; 
-                             } 
+							I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
+                            I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
+                            I_chrg_ctrl_obj.I_Collect_Times++; 
+                            
                         }
                         if (period_signl_recd >= 2) {
                             I_chrg_ctrl_obj.I_Period_Flags = Finished;          //电流一个周期数据采集完成
                             period_signl_recd = 0;
                         }
+                        
                     }
                     
                 } else if (chrg_ctrl_obj.CC_I_Adjust == Finished) {
@@ -828,7 +820,7 @@ void DMA1_Channel1_IRQHandler(void)
                         current_pp_adjust(I_1A);
                     }
                 }
-                //rt_kprintf("chrg_ctrl_obj.CC_I_Adjust = %d \n", chrg_ctrl_obj.CC_I_Adjust);
+                
             }
             if (AC_Singal_Parameter.PFC_Vin < PFC_STOPV) {
                     power_on_disenabled();

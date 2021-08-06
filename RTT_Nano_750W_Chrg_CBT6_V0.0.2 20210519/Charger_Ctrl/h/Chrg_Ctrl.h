@@ -35,8 +35,8 @@ typedef struct {
     uint16_t I_Collect_Times;
     uint16_t I_Period_Flags;
     uint16_t I_Avrg_Flags;
-    uint16_t I1_Target_buf[150];
-    uint16_t I2_Target_buf[150];   
+    uint16_t I1_Target_buf[300];
+    uint16_t I2_Target_buf[300];   
 }CHRG_I_CTRL_str;
 extern CHRG_I_CTRL_str  I_chrg_ctrl_obj;
 
