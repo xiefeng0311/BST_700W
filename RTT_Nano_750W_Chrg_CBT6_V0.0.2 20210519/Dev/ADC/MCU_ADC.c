@@ -756,7 +756,7 @@ void DMA1_Channel1_IRQHandler(void)
         }else if (pwm_step == 2) {
             if (delay >= 32000) {
                 if (ADC_Finished_Flag == ADC_FINISHED) {            //滤波转换完成
-                    rt_kprintf("AC_Singal_Parameter.PFC_Vin = %d \n", AC_Singal_Parameter.PFC_Vin);
+                    
                     if (AC_Singal_Parameter.PFC_Vin < PFC_STOPV) {
                         power_on_disenabled();
                         PWM_stop(I1_2_PWM_src);
@@ -788,9 +788,10 @@ void DMA1_Channel1_IRQHandler(void)
                         }
                         if (period_signl_recd >= 2) {
                             I_chrg_ctrl_obj.I_Period_Flags = Finished;          //一个周期数据采集完成
+                            rt_event_send(&I_PRD_event, EVENT_PERIOD_I_ADC);
                             period_signl_recd = 0;
                         }
-                    }
+                    } 
                 } else if (chrg_ctrl_obj.PRE_I_Adjust == Finished) {        //开始调整纹波电流值
                     if (period_signl_recd >= 1) {                           //同步信号出现开始调整纹波电流
                         current_pp_adjust(PRE_I);
@@ -806,14 +807,19 @@ void DMA1_Channel1_IRQHandler(void)
 							I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
                             I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
                             I_chrg_ctrl_obj.I_Collect_Times++; 
+                            if (I_chrg_ctrl_obj.I_Collect_Times >= (200-1)) {
+                                I_chrg_ctrl_obj.I_Collect_Times = 0;
+                            }
                             
                         }
                         if (period_signl_recd >= 2) {
                             I_chrg_ctrl_obj.I_Period_Flags = Finished;          //电流一个周期数据采集完成
-                            period_signl_recd = 0;
+                            rt_event_send(&I_PRD_event, EVENT_PERIOD_I_ADC);
+                            //rt_kprintf("AC_Singal_Parameter.PFC_Vin = %d \n", AC_Singal_Parameter.PFC_Vin);
+                            rt_kprintf("period_signl_recd = %d \n", period_signl_recd);
                         }
-                        
-                    }
+                    } 
+                    //
                     
                 } else if (chrg_ctrl_obj.CC_I_Adjust == Finished) {
                     if (period_signl_recd >= 1) {                           //同步信号出现开始调整纹波电流
@@ -829,6 +835,7 @@ void DMA1_Channel1_IRQHandler(void)
                 } else if (AC_Singal_Parameter.PFC_Vin > PFC_LPV) {
                     //限功率
                 } 
+            
         }
 
         DMA_ClearITPendingBit(DMA1_IT_TC1); 

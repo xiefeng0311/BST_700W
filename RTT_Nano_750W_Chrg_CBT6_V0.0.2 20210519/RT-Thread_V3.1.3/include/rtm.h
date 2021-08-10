@@ -24,7 +24,7 @@ __declspec(allocate("RTMSymTab$f"))const char __rtmsym_##symbol##_name[] = "__vs
 #pragma comment(linker, "/merge:RTMSymTab=mytext")
 
 #elif defined(__MINGW32__)
-#define RTM_EXPORT(symbol)
+#define (symbol)
 
 #else
 #define RTM_EXPORT(symbol)                                            \

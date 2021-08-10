@@ -14,6 +14,13 @@
 #define UnFinished                  0
 #define AC_STAGE_NUM                6
 
+/* 定义电流周期事件 */
+#define EVENT_PERIOD_I          (1 << 1)                    //定义周期电流事件
+#define EVENT_PERIOD_I_ADC      (1 << 2)                    //定义电流周期采集完成事件
+
+//extern rt_event_t I_PRD_event;
+extern struct rt_event I_PRD_event;
+
 typedef enum
 {
 	NO_Loader,
@@ -35,8 +42,8 @@ typedef struct {
     uint16_t I_Collect_Times;
     uint16_t I_Period_Flags;
     uint16_t I_Avrg_Flags;
-    uint16_t I1_Target_buf[300];
-    uint16_t I2_Target_buf[300];   
+    uint16_t I1_Target_buf[200];
+    uint16_t I2_Target_buf[200];   
 }CHRG_I_CTRL_str;
 extern CHRG_I_CTRL_str  I_chrg_ctrl_obj;
 

@@ -4,12 +4,20 @@
 #include  "MCU_ADC.h"
 #include <stdint.h>
 #include "rtthread.h"
+#include "rtdef.h"
 
 
 /**
  * @brief 此文件用于管理充电器各项功能
  * @brief 通过多个线程进行管理 -- Thread1: 电流检测线程，Thread2: 电压检测线程，Thread3: 温度检测线程，Thead4:PFC检测线程
  */
+struct rt_event I_PRD_event;                                    //定义个周期电流事件
+//rt_event_t I_PRD_event = RT_NULL;                             //定义事件指针
+ALIGN(RT_ALIGN_SIZE)
+
+
+
+
 /**
  * @brief define chrg_ctrl_st enum
  * 
@@ -72,9 +80,12 @@ static void I_thread_entry(void* parameter) {
     uint16_t i = 0;
     uint32_t sum1 = 0;
     uint32_t sum2 = 0;
+    uint32_t PRD_I_event = 0;
     while (1) {
         //求一个周期内电流平均值
-        if (I_chrg_ctrl_obj.I_Period_Flags == Finished) {                        
+        rt_event_recv(&I_PRD_event, EVENT_PERIOD_I, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR,
+                        RT_WAITING_FOREVER, &PRD_I_event);
+        if(PRD_I_event == EVENT_PERIOD_I_ADC) {
             for (i = 0; i < I_chrg_ctrl_obj.I_Collect_Times; i++) {
                 sum1 += I_chrg_ctrl_obj.I1_Target_buf[i];
                 sum2 += I_chrg_ctrl_obj.I2_Target_buf[i];
@@ -88,8 +99,25 @@ static void I_thread_entry(void* parameter) {
             I_chrg_ctrl_obj.I_Collect_Times = 0;                    //清零计数值
             I_chrg_ctrl_obj.I_Avrg_Flags = Finished;
             I_chrg_ctrl_obj.I_Period_Flags = UnFinished;
+            period_signl_recd = 0;
         }
-        rt_thread_mdelay(10);
+        // if (I_chrg_ctrl_obj.I_Period_Flags == Finished) {                        
+        //     for (i = 0; i < I_chrg_ctrl_obj.I_Collect_Times; i++) {
+        //         sum1 += I_chrg_ctrl_obj.I1_Target_buf[i];
+        //         sum2 += I_chrg_ctrl_obj.I2_Target_buf[i];
+        //     }
+        //     rt_kprintf("I_chrg_ctrl_obj.I_Collect_Times = %d \n", I_chrg_ctrl_obj.I_Collect_Times);
+        //     chrg_ctrl_obj.I_Channel1 = sum1 / I_chrg_ctrl_obj.I_Collect_Times;
+        //     chrg_ctrl_obj.I_Channel2 = sum2 / I_chrg_ctrl_obj.I_Collect_Times;
+        //     sum1 = 0;
+        //     sum2 = 0;
+			
+        //     I_chrg_ctrl_obj.I_Collect_Times = 0;                    //清零计数值
+        //     I_chrg_ctrl_obj.I_Avrg_Flags = Finished;
+        //     I_chrg_ctrl_obj.I_Period_Flags = UnFinished;
+        // }
+        // rt_thread_mdelay(10);
+        rt_kprintf("I_chrg_ctrl_obj.I_Collect_Times = %d \n", I_chrg_ctrl_obj.I_Collect_Times);
     } 
 }
 
@@ -102,6 +130,7 @@ void I_thread_init(void) {
                 sizeof(rt_I_thread_stack),                      //线程栈大小
                 2,                                              //线程优先级
                 20);  
+	rt_event_init(&I_PRD_event, "PRD_I_event", RT_IPC_FLAG_FIFO);
     rt_thread_startup(&I_thread);                               //启动电流线程
 }
 INIT_APP_EXPORT(I_thread_init);                                 //初始化电流线程
@@ -305,7 +334,6 @@ static void CC_Chargering(void)
         //I_chrg_ctrl_obj.I_Avrg_Flags = UnFinished;                //test 20210807
         rt_kprintf("chrg_ctrl_obj.Target_I_PWM_CTRL   = %d \n", chrg_ctrl_obj.Target_I_PWM_CTRL);
     }
-    //rt_kprintf("ccmodle \n");
 }
 
 static void CV_Chargering(void) 
