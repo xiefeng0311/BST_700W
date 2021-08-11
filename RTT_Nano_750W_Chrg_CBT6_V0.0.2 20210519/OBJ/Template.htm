@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\Template.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\Template.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Aug 10 18:21:40 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Aug 11 17:54:15 2021
 <BR><P>
 <H3>Maximum Stack Usage =        452 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -642,7 +642,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> chrg_ctrl.o(.rti_fn.6)
 </UL>
-<P><STRONG><a name="[1a]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 548 bytes, Stack size 8 bytes, mcu_adc.o(i.DMA1_Channel1_IRQHandler))
+<P><STRONG><a name="[1a]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 564 bytes, Stack size 8 bytes, mcu_adc.o(i.DMA1_Channel1_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 188<LI>Call Chain = DMA1_Channel1_IRQHandler &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_event_send
@@ -1662,7 +1662,6 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Channel1_IRQHandler
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADCInit
-<LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I_thread_entry
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CC_Chargering
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_system_heap_init
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Control_Init
@@ -2335,7 +2334,7 @@ Local Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_board_init
 </UL>
 
-<P><STRONG><a name="[9c]"></a>CC_Chargering</STRONG> (Thumb, 172 bytes, Stack size 8 bytes, chrg_ctrl.o(i.CC_Chargering))
+<P><STRONG><a name="[9c]"></a>CC_Chargering</STRONG> (Thumb, 176 bytes, Stack size 8 bytes, chrg_ctrl.o(i.CC_Chargering))
 <BR><BR>[Stack]<UL><LI>Max Depth = 188<LI>Call Chain = CC_Chargering &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_f
@@ -2362,11 +2361,10 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CHRG_CTRL_thread_entry
 </UL>
 
-<P><STRONG><a name="[50]"></a>I_thread_entry</STRONG> (Thumb, 152 bytes, Stack size 16 bytes, chrg_ctrl.o(i.I_thread_entry))
-<BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = I_thread_entry &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
+<P><STRONG><a name="[50]"></a>I_thread_entry</STRONG> (Thumb, 130 bytes, Stack size 16 bytes, chrg_ctrl.o(i.I_thread_entry))
+<BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = I_thread_entry &rArr; rt_event_recv &rArr; rt_ipc_list_suspend &rArr; rt_thread_suspend &rArr; rt_timer_stop &rArr; _rt_timer_remove
 </UL>
-<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_event_recv
+<BR>[Calls]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_event_recv
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> chrg_ctrl.o(i.I_thread_init)
 </UL>

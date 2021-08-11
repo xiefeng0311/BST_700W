@@ -42,6 +42,10 @@
 #define  PWM_FM_200K    360
 #define  PWM_FM_120K    600
 #define  PWM_FM_100K    720
+#define  PWM_FM_95K     758
+#define  PWM_FM_92K     782
+
+#define  PWM_FM_90K     800
 #define  PWM_FM_80K     900
 typedef enum {
     FM_200KHZ,
