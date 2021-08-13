@@ -12,8 +12,7 @@
  * @brief 通过多个线程进行管理 -- Thread1: 电流检测线程，Thread2: 电压检测线程，Thread3: 温度检测线程，Thead4:PFC检测线程
  */
 struct rt_event I_PRD_event;                                    //定义个周期电流事件
-//rt_event_t I_PRD_event = RT_NULL;                             //定义事件指针
-ALIGN(RT_ALIGN_SIZE)
+
 
 
 
@@ -75,52 +74,36 @@ static rt_uint8_t rt_I_thread_stack[256];
 
 
 static void I_thread_entry(void* parameter) {
-    uint16_t I1_Value = 0;
-    uint16_t I2_Value = 0;
     uint16_t i = 0;
     uint32_t sum1 = 0;
     uint32_t sum2 = 0;
+    register rt_ubase_t level;
     rt_uint32_t PRD_I_event = 0;
+
     while (1) {
         //求一个周期内电流平均值
         rt_event_recv(&I_PRD_event, EVENT_PERIOD_I_ADC, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR,
                         RT_WAITING_FOREVER, &PRD_I_event);
         if(PRD_I_event == EVENT_PERIOD_I_ADC) {
-			
+			level = rt_hw_interrupt_disable();                      //关闭总中断
             if (I_chrg_ctrl_obj.I_Collect_Times > 0) {
-                
+                sum1 = 0;
+                sum2 = 0;
                 for (i = 0; i < I_chrg_ctrl_obj.I_Collect_Times; i++) {
                     sum1 += I_chrg_ctrl_obj.I1_Target_buf[i];
                     sum2 += I_chrg_ctrl_obj.I2_Target_buf[i];
                 }
                 chrg_ctrl_obj.I_Channel1 = sum1 / I_chrg_ctrl_obj.I_Collect_Times;
                 chrg_ctrl_obj.I_Channel2 = sum2 / I_chrg_ctrl_obj.I_Collect_Times;
-                sum1 = 0;
-                sum2 = 0;
-                I_chrg_ctrl_obj.I_Collect_Times = 0;                    //清零计数值
-                I_chrg_ctrl_obj.I_Avrg_Flags = Finished;
-                I_chrg_ctrl_obj.I_Period_Flags = UnFinished;
-                period_signl_recd = 0;
-                
+                rt_kprintf("I_Collect_Times = %d \n", I_chrg_ctrl_obj.I_Collect_Times);             //TEST
             }  
-        }
-        // if (I_chrg_ctrl_obj.I_Period_Flags == Finished) {                        
-        //     for (i = 0; i < I_chrg_ctrl_obj.I_Collect_Times; i++) {
-        //         sum1 += I_chrg_ctrl_obj.I1_Target_buf[i];
-        //         sum2 += I_chrg_ctrl_obj.I2_Target_buf[i];
-        //     }
-        //     rt_kprintf("I_chrg_ctrl_obj.I_Collect_Times = %d \n", I_chrg_ctrl_obj.I_Collect_Times);
-        //     chrg_ctrl_obj.I_Channel1 = sum1 / I_chrg_ctrl_obj.I_Collect_Times;
-        //     chrg_ctrl_obj.I_Channel2 = sum2 / I_chrg_ctrl_obj.I_Collect_Times;
-        //     sum1 = 0;
-        //     sum2 = 0;
-			
-        //     I_chrg_ctrl_obj.I_Collect_Times = 0;                    //清零计数值
-        //     I_chrg_ctrl_obj.I_Avrg_Flags = Finished;
-        //     I_chrg_ctrl_obj.I_Period_Flags = UnFinished;
-        // }
-        // rt_thread_mdelay(10);
-        
+            I_chrg_ctrl_obj.I_Avrg_Flags = Finished;
+            I_chrg_ctrl_obj.I_Period_Flags = UnFinished;
+            period_signl_recd = 0;                                  //清周期同步信号
+            
+            rt_hw_interrupt_enable(level);                          //使能总中断
+            //rt_kprintf("I_Channel1 = %d \n", chrg_ctrl_obj.I_Channel1);             //TEST
+        } 
     } 
 }
 
@@ -132,7 +115,7 @@ void I_thread_init(void) {
                 &rt_I_thread_stack[0],                          //线程栈起始地址
                 sizeof(rt_I_thread_stack),                      //线程栈大小
                 2,                                              //线程优先级
-                0);  
+                10);  
 	rt_event_init(&I_PRD_event, "PRD_I_event", RT_IPC_FLAG_FIFO);
     rt_thread_startup(&I_thread);                               //启动电流线程
 }
@@ -301,13 +284,16 @@ static void Pre_Chargering(void)
     
 }
 
+
+
 static void CC_Chargering(void) 
 {
-    chrg_ctrl_obj.Target_I_Value = I_1A;
+    chrg_ctrl_obj.Target_I_Value = I_05A;
     if (I_chrg_ctrl_obj.I_Avrg_Flags == Finished) {
         if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle1) {
             if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
                 if (chrg_ctrl_obj.I_Channel1 < chrg_ctrl_obj.Target_I_Value) {
+                    
                     //chrg_ctrl_obj.Target_I_PWM_CTRL++;
                     if (chrg_ctrl_obj.Target_I_PWM_CTRL < PWM_FM_95K) {
                         chrg_ctrl_obj.Target_I_PWM_CTRL++;
@@ -321,7 +307,7 @@ static void CC_Chargering(void)
                 }
             }
             
-            rt_kprintf("chrg_ctrl_obj.I_Channel1  = %d \n", chrg_ctrl_obj.I_Channel1);
+            
         } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
             if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
                 if (chrg_ctrl_obj.I_Channel2 < chrg_ctrl_obj.Target_I_Value) {
@@ -402,8 +388,8 @@ static void CHRG_CTRL_thread_entry(void * parameter)
         // } 
         // rt_kprintf("chrg_ctrl_obj.CHRG_STT = %d \n", chrg_ctrl_obj.CHRG_STT);
         // rt_kprintf("chargering_step = %d \n", chargering_step);
+        rt_kprintf("F_PWM = %d \n", chrg_ctrl_obj.Target_I_PWM_CTRL);
         rt_thread_mdelay(20);
-
     }
 }
 
@@ -425,7 +411,7 @@ void CHRG_CTRL_thread_init(void)
                 RT_NULL,                                                //线程入口参数
                 &CHRG_CTRL_thread_stack[0],                             //线程栈起始地址
                 sizeof(CHRG_CTRL_thread_stack),                         //线程栈大小
-                4,                                                      //线程优先级
+                10,                                                      //线程优先级
                 20); 
     rt_thread_startup(&CHRG_CTRL_thread);                               //启动电压控制线程
 }

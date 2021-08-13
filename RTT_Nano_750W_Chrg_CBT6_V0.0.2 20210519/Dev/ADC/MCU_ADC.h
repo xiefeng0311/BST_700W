@@ -151,6 +151,12 @@
 #define I_1A                       496
 
 /**
+ * @brief define cc current
+ * @param current gain is 40,R=0.01,Current=1A
+ */
+#define I_05A                       248
+
+/**
  * @brief 实际测试电流纹波是>800mA, 800多mA是波峰和波谷之间值，ADC是0.1ms采集一次，PFC
  * @param current gain is 40,R=0.01,Current=0.016A
  */

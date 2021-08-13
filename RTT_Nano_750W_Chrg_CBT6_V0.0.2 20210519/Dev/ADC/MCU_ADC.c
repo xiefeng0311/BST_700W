@@ -723,6 +723,11 @@ void current_pp_adjust(uint16_t target_I)
     }
     //rt_kprintf("data_num = %d\n\n", data_num);
 }
+/* =========================電流調節================================= */
+void current_adjust(uint16_t target_I)
+{
+
+}
 
 
 
@@ -779,74 +784,56 @@ void DMA1_Channel1_IRQHandler(void)
             //adc_data_carry(AC_Singal_Parameter.ADC_data_array, ADCConvertedValue);
             //rt_kprintf("CHRG1I = %d \n", ADCConvertedValue[CHRG1I_CHNL4]);
             if (chrg_ctrl_obj.CHRG_STT == PRE_CHRG) {
-                if  (chrg_ctrl_obj.PRE_I_Adjust == UnFinished) {            //调整中心电流值
-                    if (period_signl_recd >= 1) {                           //同步信号首次出现
+                if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
+                    
+                    if (period_signl_recd == 1) {
                         if (I_chrg_ctrl_obj.I_Period_Flags == UnFinished) {
-                            /* 电流采集不采用队列滤波方式 */
-							I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
-                            I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
-                            I_chrg_ctrl_obj.I_Collect_Times++;
+                            if (I_chrg_ctrl_obj.I_Collect_Times <= (150-1)) {
+                                I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
+                                I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
+                                I_chrg_ctrl_obj.I_Collect_Times ++; 
+                                //ADC_times++;
+                            }
                         }
-                        if (period_signl_recd >= 2) {
-                            I_chrg_ctrl_obj.I_Period_Flags = Finished;          //一个周期数据采集完成
-                            rt_event_send(&I_PRD_event, EVENT_PERIOD_I_ADC);
-                            period_signl_recd = 0;
-                        }
-                    } 
-                } else if (chrg_ctrl_obj.PRE_I_Adjust == Finished) {        //开始调整纹波电流值
+                        
+                    } else if (period_signl_recd >= 2) {
+                        //period_signl_recd = 0;
+                        ADC_times = 0;
+                        I_chrg_ctrl_obj.I_Period_Flags = Finished;          //电流一个周期数据采集完成
+                        rt_event_send(&I_PRD_event, EVENT_PERIOD_I_ADC);
+                        //rt_kprintf("AC_Singal_Parameter.PFC_Vin = %d \n", AC_Singal_Parameter.PFC_Vin);
+                        //rt_kprintf("period_signl_recd = %d \n", period_signl_recd);
+                    }
+                } else if (chrg_ctrl_obj.CC_I_Adjust == Finished) {
                     if (period_signl_recd >= 1) {                           //同步信号出现开始调整纹波电流
-                        current_pp_adjust(PRE_I);
+                        current_adjust(I_1A);
                     }
                 }
                 
             } else if (chrg_ctrl_obj.CHRG_STT == CC_CHRG) {
-                
-                
+                 
                 if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
                     
-                    if (period_signl_recd >= 1) {
-                        ADC_times++;                //TEST
+                    if (period_signl_recd == 1) {
+                        if (I_chrg_ctrl_obj.I_Period_Flags == UnFinished) {
+                            if (I_chrg_ctrl_obj.I_Collect_Times <= (150-1)) {
+                                I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
+                                I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
+                                I_chrg_ctrl_obj.I_Collect_Times ++; 
+                            }
+                        }
                         
-                        I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
-                        I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
-                        I_chrg_ctrl_obj.I_Collect_Times += 1; 
-                        rt_kprintf("I = %d \n", I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times]);             //TEST
-                        if (I_chrg_ctrl_obj.I_Collect_Times >= (500-1)) {
-                            I_chrg_ctrl_obj.I_Collect_Times = 0;
-                            period_signl_recd = 0;
-                        }
-
-                        // if (I_chrg_ctrl_obj.I_Period_Flags == UnFinished) {
-                        //      /* 电流采集不采用队列滤波方式 */
-						// 	I_chrg_ctrl_obj.I1_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG1I_CHNL4];
-                        //     I_chrg_ctrl_obj.I2_Target_buf[I_chrg_ctrl_obj.I_Collect_Times] = ADCConvertedValue[CHRG2I_CHNL6];
-                        //     I_chrg_ctrl_obj.I_Collect_Times += 1; 
-                        //     rt_kprintf("Times = %d \n", I_chrg_ctrl_obj.I_Collect_Times);
-                        //     if (I_chrg_ctrl_obj.I_Collect_Times >= (500-1)) {
-                        //         I_chrg_ctrl_obj.I_Collect_Times = 0;
-                        //         period_signl_recd = 0;
-                        //     }
-                        // }
-                        if (period_signl_recd >= 2) {
-                            period_signl_recd = 0;
-                            //rt_kprintf("ADC_times = %d \n", ADC_times);             //TEST
-                            ADC_times = 0;
-                            I_chrg_ctrl_obj.I_Period_Flags = Finished;          //电流一个周期数据采集完成
-                            rt_event_send(&I_PRD_event, EVENT_PERIOD_I_ADC);
-                            //rt_kprintf("AC_Singal_Parameter.PFC_Vin = %d \n", AC_Singal_Parameter.PFC_Vin);
-                            //rt_kprintf("period_signl_recd = %d \n", period_signl_recd);
-                        }
-                    } 
-                    //
-                    
+                    } else if (period_signl_recd >= 2) {
+                        I_chrg_ctrl_obj.I_Period_Flags = Finished;                  //电流一个周期数据采集完成
+                        rt_event_send(&I_PRD_event, EVENT_PERIOD_I_ADC);            //发送同步事件
+                    }
                 } else if (chrg_ctrl_obj.CC_I_Adjust == Finished) {
                     if (period_signl_recd >= 1) {                           //同步信号出现开始调整纹波电流
-                        //current_pp_adjust(I_1A);
+                        current_adjust(I_1A);
                     }
                 }
                 
-            }
-            if (AC_Singal_Parameter.PFC_Vin < PFC_STOPV) {
+            } else if (AC_Singal_Parameter.PFC_Vin < PFC_STOPV) {
                 power_on_disenabled();
                 PWM_stop(I1_2_PWM_src);
                 pwm_step = 0;

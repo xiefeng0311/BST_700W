@@ -345,6 +345,9 @@ void  EXTI2_IRQHandler(void)
 	times++;
 	if (ACSingal_In() == 1) {
 		period_signl_recd++;                    //ADC监测同步信号使用
+		if (period_signl_recd == 1) {
+			I_chrg_ctrl_obj.I_Collect_Times = 0;			//清零重新计数
+		}
 		times = 0;
 		Time3_Start();                          //启动5ms的监测		
     }
