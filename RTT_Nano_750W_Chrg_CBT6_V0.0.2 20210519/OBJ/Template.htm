@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\Template.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\Template.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Aug 13 10:18:43 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Aug 18 18:16:07 2021
 <BR><P>
 <H3>Maximum Stack Usage =        452 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -528,10 +528,10 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = ADCInit &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
 </UL>
 <BR>[Calls]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mb_init
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_Pin_Init
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_Mode_Init
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_DMA_Init
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADCProcessInit
 </UL>
@@ -644,8 +644,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> chrg_ctrl.o(.rti_fn.6)
 </UL>
-<P><STRONG><a name="[1a]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 558 bytes, Stack size 8 bytes, mcu_adc.o(i.DMA1_Channel1_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = DMA1_Channel1_IRQHandler &rArr; rt_event_send &rArr; rt_thread_resume &rArr; rt_timer_stop &rArr; _rt_timer_remove
+<P><STRONG><a name="[1a]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 560 bytes, Stack size 8 bytes, mcu_adc.o(i.DMA1_Channel1_IRQHandler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 204<LI>Call Chain = DMA1_Channel1_IRQHandler &rArr; current_pp_adjust &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_event_send
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;power_on_enabled
@@ -654,7 +654,7 @@ Global Symbols
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_GetITStatus
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_ClearITPendingBit
-<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_adjust
+<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_pp_adjust
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_filter
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;power_on_disenabled
 </UL>
@@ -897,7 +897,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_hd.o(.text)
 </UL>
-<P><STRONG><a name="[2c]"></a>TIM3_IRQHandler</STRONG> (Thumb, 88 bytes, Stack size 8 bytes, drv_timer.o(i.TIM3_IRQHandler))
+<P><STRONG><a name="[2c]"></a>TIM3_IRQHandler</STRONG> (Thumb, 92 bytes, Stack size 8 bytes, drv_timer.o(i.TIM3_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = TIM3_IRQHandler &rArr; TIM_GetITStatus
 </UL>
 <BR>[Calls]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
@@ -1167,8 +1167,10 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> msh.o(FSymTab)
 </UL>
-<P><STRONG><a name="[b2]"></a>current_adjust</STRONG> (Thumb, 82 bytes, Stack size 8 bytes, mcu_adc.o(i.current_adjust))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = current_adjust
+<P><STRONG><a name="[b2]"></a>current_pp_adjust</STRONG> (Thumb, 320 bytes, Stack size 16 bytes, mcu_adc.o(i.current_pp_adjust))
+<BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = current_pp_adjust &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
+</UL>
+<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Channel1_IRQHandler
 </UL>
@@ -1197,8 +1199,8 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 292<LI>Call Chain = finsh_system_init &rArr; rt_thread_create &rArr; rt_object_delete &rArr; rt_free &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_create
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_startup
 <LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_startup
 <LI><a href="#[f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_calloc
 <LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_sem_init
 <LI><a href="#[f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finsh_system_function_init
@@ -1661,9 +1663,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_console_output
 <LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_vsnprintf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADCInit
-<LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I_thread_entry
-<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CHRG_CTRL_thread_entry
+<BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_pp_adjust
+<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADCInit
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_system_heap_init
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Control_Init
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pwm_entry
@@ -2335,7 +2336,7 @@ Local Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_board_init
 </UL>
 
-<P><STRONG><a name="[9c]"></a>CC_Chargering</STRONG> (Thumb, 166 bytes, Stack size 8 bytes, chrg_ctrl.o(i.CC_Chargering))
+<P><STRONG><a name="[9c]"></a>CC_Chargering</STRONG> (Thumb, 252 bytes, Stack size 8 bytes, chrg_ctrl.o(i.CC_Chargering))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = CC_Chargering &rArr; set_f
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_f
@@ -2343,11 +2344,10 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Chargering_ctrl
 </UL>
 
-<P><STRONG><a name="[4f]"></a>CHRG_CTRL_thread_entry</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, chrg_ctrl.o(i.CHRG_CTRL_thread_entry))
-<BR><BR>[Stack]<UL><LI>Max Depth = 180<LI>Call Chain = CHRG_CTRL_thread_entry &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
+<P><STRONG><a name="[4f]"></a>CHRG_CTRL_thread_entry</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, chrg_ctrl.o(i.CHRG_CTRL_thread_entry))
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = CHRG_CTRL_thread_entry &rArr; rt_thread_mdelay &rArr; rt_thread_sleep &rArr; rt_timer_start &rArr; _rt_timer_remove
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Chargering_ctrl
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> chrg_ctrl.o(i.CHRG_CTRL_thread_init)
@@ -2362,11 +2362,10 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CHRG_CTRL_thread_entry
 </UL>
 
-<P><STRONG><a name="[50]"></a>I_thread_entry</STRONG> (Thumb, 144 bytes, Stack size 16 bytes, chrg_ctrl.o(i.I_thread_entry))
-<BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = I_thread_entry &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
+<P><STRONG><a name="[50]"></a>I_thread_entry</STRONG> (Thumb, 134 bytes, Stack size 16 bytes, chrg_ctrl.o(i.I_thread_entry))
+<BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = I_thread_entry &rArr; rt_event_recv &rArr; rt_ipc_list_suspend &rArr; rt_thread_suspend &rArr; rt_timer_stop &rArr; _rt_timer_remove
 </UL>
-<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_interrupt_enable
+<BR>[Calls]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_interrupt_enable
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_hw_interrupt_disable
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_event_recv
 </UL>
@@ -2476,8 +2475,8 @@ Local Symbols
 <P><STRONG><a name="[57]"></a>pwm_entry</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, pwm.o(i.pwm_entry))
 <BR><BR>[Stack]<UL><LI>Max Depth = 188<LI>Call Chain = pwm_entry &rArr; rt_kprintf &rArr; rt_vsnprintf &rArr; print_number
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
+<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_kprintf
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_thread_mdelay
 <LI><a href="#[110]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rt_mb_recv
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> pwm.o(i.pwm_thread_init)

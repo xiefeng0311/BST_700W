@@ -77,12 +77,14 @@ void TIM3_IRQHandler(void)
             Time3_Stop();
             times_count = 0;
         }
+        /* 同步信号超5S为高电平时判为故障处理 */
         if (times_count >= 5) {
             PWM_stop(I1_2_PWM_src);
             power_on_disenabled();
             Time3_Stop();
             times_count = 0;
             pwm_step = 0;
+            pp_adjust_step = 0;
         }	 
         TIM_ClearITPendingBit(TIM3, TIM_FLAG_Update); 
 	}

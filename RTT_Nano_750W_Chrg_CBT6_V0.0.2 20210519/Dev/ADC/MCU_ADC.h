@@ -300,6 +300,8 @@ typedef enum {
 
 extern char mb_pool[40];
 
+extern uint8_t  pp_adjust_step;
+
 extern uint8_t ADC_Finished_Flag;
 
 extern struct rt_mailbox mailbox_adc;

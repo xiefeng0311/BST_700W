@@ -47,7 +47,7 @@ CHRG_I_CTRL_str  I_chrg_ctrl_obj = {
 
 CHRG_CTRL_STR  chrg_ctrl_obj = {
     .Target_I_PWM_CTRL = PWM_FM_200K,
-    .Target_I_Value = CHRG_Channle1,
+    .Target_I_Value = 0,
     .Fully_V_Value = BAT_FULL_ADC,
     .I_Channel1 = 0,
     .I_Channel2 = 0,
@@ -95,14 +95,13 @@ static void I_thread_entry(void* parameter) {
                 }
                 chrg_ctrl_obj.I_Channel1 = sum1 / I_chrg_ctrl_obj.I_Collect_Times;
                 chrg_ctrl_obj.I_Channel2 = sum2 / I_chrg_ctrl_obj.I_Collect_Times;
-                rt_kprintf("I_Collect_Times = %d \n", I_chrg_ctrl_obj.I_Collect_Times);             //TEST
+                //rt_kprintf("I_Collect_Times = %d \n", I_chrg_ctrl_obj.I_Collect_Times);             //TEST
             }  
             I_chrg_ctrl_obj.I_Avrg_Flags = Finished;
             I_chrg_ctrl_obj.I_Period_Flags = UnFinished;
             period_signl_recd = 0;                                  //清周期同步信号
             
             rt_hw_interrupt_enable(level);                          //使能总中断
-            //rt_kprintf("I_Channel1 = %d \n", chrg_ctrl_obj.I_Channel1);             //TEST
         } 
     } 
 }
@@ -288,40 +287,41 @@ static void Pre_Chargering(void)
 
 static void CC_Chargering(void) 
 {
-    chrg_ctrl_obj.Target_I_Value = I_05A;
+    uint16_t diff = 0;
+    chrg_ctrl_obj.Target_I_Value = I_1A;
+    diff = chrg_ctrl_obj.Target_I_Value * 2 / 100;
     if (I_chrg_ctrl_obj.I_Avrg_Flags == Finished) {
         if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle1) {
-            if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
-                if (chrg_ctrl_obj.I_Channel1 < chrg_ctrl_obj.Target_I_Value) {
-                    
-                    //chrg_ctrl_obj.Target_I_PWM_CTRL++;
-                    if (chrg_ctrl_obj.Target_I_PWM_CTRL < PWM_FM_95K) {
-                        chrg_ctrl_obj.Target_I_PWM_CTRL++;
-                        set_f(chrg_ctrl_obj.Target_I_PWM_CTRL); 
-                    }
-                    
-                    chrg_ctrl_obj.IPP_Adjust = WAITING;
-                } else {
-                    chrg_ctrl_obj.IPP_Adjust = EXECUTING;
-                    chrg_ctrl_obj.CC_I_Adjust = Finished;
+            if (chrg_ctrl_obj.I_Channel1 < (chrg_ctrl_obj.Target_I_Value - diff)) {
+                //chrg_ctrl_obj.Target_I_PWM_CTRL++;
+                if (chrg_ctrl_obj.Target_I_PWM_CTRL < PWM_FM_95K) {
+                    chrg_ctrl_obj.Target_I_PWM_CTRL++;
+                    set_f(chrg_ctrl_obj.Target_I_PWM_CTRL); 
                 }
+                chrg_ctrl_obj.IPP_Adjust = WAITING;
+            } else if (chrg_ctrl_obj.I_Channel1 > (chrg_ctrl_obj.Target_I_Value + diff)) {
+                chrg_ctrl_obj.Target_I_PWM_CTRL--;
+                set_f(chrg_ctrl_obj.Target_I_PWM_CTRL);
+                chrg_ctrl_obj.IPP_Adjust = WAITING;
+            } else {
+                chrg_ctrl_obj.IPP_Adjust = EXECUTING;
+                chrg_ctrl_obj.CC_I_Adjust = Finished;
             }
-            
-            
-        } else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
-            if (chrg_ctrl_obj.CC_I_Adjust == UnFinished) {
-                if (chrg_ctrl_obj.I_Channel2 < chrg_ctrl_obj.Target_I_Value) {
-                    //chrg_ctrl_obj.Target_I_PWM_CTRL++;
-                    if (chrg_ctrl_obj.Target_I_PWM_CTRL < PWM_FM_95K) {
-                        chrg_ctrl_obj.Target_I_PWM_CTRL++;
-                        set_f(chrg_ctrl_obj.Target_I_PWM_CTRL); 
-                    }
-                    
-                    chrg_ctrl_obj.IPP_Adjust = WAITING;
-                } else {
-                    chrg_ctrl_obj.IPP_Adjust = EXECUTING;
-                    chrg_ctrl_obj.CC_I_Adjust = Finished;
+        }else if (chrg_ctrl_obj.FdBack_CTRL_Channel == CHRG_Channle2) {
+            if (chrg_ctrl_obj.I_Channel2 < (chrg_ctrl_obj.Target_I_Value - diff)) {
+                //chrg_ctrl_obj.Target_I_PWM_CTRL++;
+                if (chrg_ctrl_obj.Target_I_PWM_CTRL < PWM_FM_95K) {
+                    chrg_ctrl_obj.Target_I_PWM_CTRL++;
+                    set_f(chrg_ctrl_obj.Target_I_PWM_CTRL); 
                 }
+                chrg_ctrl_obj.IPP_Adjust = WAITING;
+            } else if (chrg_ctrl_obj.I_Channel2 > (chrg_ctrl_obj.Target_I_Value + diff)) {
+                chrg_ctrl_obj.Target_I_PWM_CTRL--;
+                set_f(chrg_ctrl_obj.Target_I_PWM_CTRL);
+                chrg_ctrl_obj.IPP_Adjust = WAITING;
+            } else {
+                chrg_ctrl_obj.IPP_Adjust = EXECUTING;
+                chrg_ctrl_obj.CC_I_Adjust = Finished;
             }
         }
         I_chrg_ctrl_obj.I_Avrg_Flags = UnFinished;                //清周期电流采集完成标志20210811
@@ -388,7 +388,7 @@ static void CHRG_CTRL_thread_entry(void * parameter)
         // } 
         // rt_kprintf("chrg_ctrl_obj.CHRG_STT = %d \n", chrg_ctrl_obj.CHRG_STT);
         // rt_kprintf("chargering_step = %d \n", chargering_step);
-        rt_kprintf("F_PWM = %d \n", chrg_ctrl_obj.Target_I_PWM_CTRL);
+        //rt_kprintf("F_PWM = %d \n", chrg_ctrl_obj.Target_I_PWM_CTRL);
         rt_thread_mdelay(20);
     }
 }

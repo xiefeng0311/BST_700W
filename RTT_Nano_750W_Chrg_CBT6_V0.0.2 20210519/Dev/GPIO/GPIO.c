@@ -351,15 +351,6 @@ void  EXTI2_IRQHandler(void)
 		times = 0;
 		Time3_Start();                          //启动5ms的监测		
     }
-		
-    // if (times > 20) {
-    //     if (ACSingal_In() == 1) {
-    //         period_signl_recd++;                    //ADC监测同步信号使用
-    //         times = 0;
-    //         Time3_Start();                          //启动5ms的监测
-    //     }
-	// 	EXTI_ClearITPendingBit(EXTI_Line2);  //清除LINE3上的中断标志位  
-    // }
-    // //5ms的保护采用定时器中断实现，并且在终端中启动定时器
+	
 	EXTI_ClearITPendingBit(EXTI_Line2);  //清除LINE3上的中断标志位  
 }
